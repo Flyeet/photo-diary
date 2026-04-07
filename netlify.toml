@@ -1,10 +1,10 @@
 [build]
   publish = "_site"
-  command = """npm cache clean --force && npm install --verbose 2>&1 | head -100 && npx @11ty/eleventy"""
+  command = "npm ci && npx @11ty/eleventy"
   functions = "netlify/functions"
 
 [build.environment]
-  NPM_CONFIG_REGISTRY = "https://registry.npmmirror.com/"
+  NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
 
 [[redirects]]
   from = "/admin"
