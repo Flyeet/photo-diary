@@ -1,10 +1,11 @@
 [build]
   publish = "_site"
-  command = """NPM_CONFIG_TOKEN="${NPM_CONFIG_TOKEN}" npm install"""
+  command = """npm install --registry=https://registry.npmjs.org/ --no-audit --no-fund"""
   functions = "netlify/functions"
 
 [build.environment]
   NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
+  NPM_TOKEN = "${NPM_TOKEN}"
 
 [[redirects]]
   from = "/admin"
