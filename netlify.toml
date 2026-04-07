@@ -1,6 +1,6 @@
 [build]
   publish = "_site"
-  command = """npm install --registry=https://registry.npmmirror.com/"""
+  command = """npm install --ignore-scripts && npx @11ty/eleventy"""
   functions = "netlify/functions"
 
 [build.environment]
