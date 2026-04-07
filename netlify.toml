@@ -5,6 +5,7 @@
 
 [build.environment]
   NPM_CONFIG_REGISTRY = "https://registry.npmjs.org/"
+  NPM_CONFIG_TOKEN = "${NPM_CONFIG_TOKEN}"
 
 [[redirects]]
   from = "/admin"
