@@ -67,52 +67,6 @@
 
 ## 快速开始
 
-### 🚀 零代码部署（纯小白）
-
-不用装任何软件，跟着以下步骤一步步来：
-
-**第一步：注册 Cloudinary（图床）**
-
-1. 打开 [Cloudinary](https://cloudinary.com)，点击 **Sign Up** 注册免费账号
-2. 注册成功后，进入 Dashboard，你会看到三样东西：
-   - **Cloud Name**（云名称）
-   - **API Key**
-   - **API Secret**
-3. 把它们复制下来，下一步要用
-
-**第二步：一键部署到 Netlify**
-
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/gongting1023/photography-diary)
-
-点击上面的按钮 → 跳转到 Netlify → 系统会提示你**连接 GitHub 账号**（没有的话注册一个）→ 然后自动复制（Fork）仓库到你名下。
-
-**第三步：配置密钥**
-
-在 Netlify 页面找到 **Environment variables（环境变量）**，添加刚才复制的三个值：
-
-| 变量名 | 填什么 |
-|--------|--------|
-| `CLOUDINARY_CLOUD_NAME` | 你的 Cloud Name |
-| `CLOUDINARY_API_KEY` | 你的 API Key |
-| `CLOUDINARY_API_SECRET` | 你的 API Secret |
-
-**第四步：等待部署**
-
-点击 Deploy，等一两分钟，Netlify 会分配一个域名给你，打开就能看到你的摄影网站了！
-
-**第五步：改成你自己的名字**
-
-去你的 GitHub 仓库里找到 `config.js` 文件，点击编辑（铅笔图标），把里面的内容改成你自己的：
-
-```js
-siteName: '你的摄影日记',
-footer: { html: '© 2026 你的名字' }
-```
-
-改完后保存（Commit），Netlify 会自动重新部署，网站就变成你的了！
-
-> **之后怎么更新照片？** 把照片上传到 Cloudinary 的日期文件夹（如 `2026-01-01`），网站会自动同步展示。
-
 ### 💻 本地开发与自定义（有基础）
 
 需要你电脑上装了 [Node.js](https://nodejs.org/)（建议 v16+）。
