@@ -85,7 +85,7 @@ async function getAlbums() {
 
 async function getAlbum(folder) {
   const result = await cloudinary.search
-    .expression(`resource_type:image AND folder:${folder}`)
+    .expression(`resource_type:image AND folder:"${folder}"`)
     .sort_by('created_at', 'asc')
     .max_results(2500)
     .execute();
