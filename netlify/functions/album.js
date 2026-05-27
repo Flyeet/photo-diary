@@ -39,7 +39,7 @@ exports.handler = async function(event, context) {
     const images = resources.map(resource => {
       const originalFilename = resource.display_name || resource.public_id.split('/').pop();
       return {
-        url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`,
+        url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/v${resource.version}/${resource.public_id}.${resource.format}`,
         filename: originalFilename,
         publicId: resource.public_id,
         format: resource.format,

@@ -64,7 +64,7 @@ async function getAlbums() {
     }
 
     folderMap.get(folder).images.push({
-      url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${resource.version}/${resource.public_id}.${resource.format}`,
+      url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/v${resource.version}/${resource.public_id}.${resource.format}`,
       filename: resource.display_name || resource.public_id.split('/').pop(),
       width: resource.width,
       height: resource.height

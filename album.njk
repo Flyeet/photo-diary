@@ -8,6 +8,7 @@
   <title id="pageTitle">加载中... - {{ site.siteName }}</title>
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="/manifest.json">
+  <link rel="preconnect" href="https://res.cloudinary.com">
   <meta name="theme-color" content="#e07a5f">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -178,6 +179,10 @@
         loading.style.display = 'none';
         content.style.display = 'block';
         renderPage(1);
+        if (window.location.hash.startsWith('#photo-')) {
+          var idx = parseInt(window.location.hash.slice(7)) - 1;
+          if (idx >= 0 && idx < images.length) setTimeout(function(){ openLightbox(idx); }, 300);
+        }
       } catch (error) {
         console.error('Load error:', error);
         loading.innerHTML = '<p>加载失败，请确保本地API服务器已启动<br><br>运行: <strong>npm run dev</strong></p>';
@@ -252,17 +257,28 @@
       updateLightbox();
       document.getElementById('lightbox').classList.add('active');
       document.body.style.overflow = 'hidden';
+      history.replaceState(null, '', '#photo-' + (index + 1));
     }
 
     function closeLightbox() {
       document.getElementById('lightbox').classList.remove('active');
       document.body.style.overflow = '';
+      history.replaceState(null, '', window.location.pathname);
     }
 
     function updateLightbox() {
       document.getElementById('lb-img').src = images[currentIndex].url;
       document.getElementById('lb-filename').textContent = images[currentIndex].filename;
       document.getElementById('lb-counter').textContent = (currentIndex + 1) + ' / ' + images.length;
+      history.replaceState(null, '', '#photo-' + (currentIndex + 1));
+      preloadAdjacent();
+    }
+
+    function preloadAdjacent() {
+      var next = (currentIndex + 1) % images.length;
+      var prev = (currentIndex - 1 + images.length) % images.length;
+      var img1 = new Image(); img1.src = images[next].url;
+      var img2 = new Image(); img2.src = images[prev].url;
     }
 
     function prevImage() {
