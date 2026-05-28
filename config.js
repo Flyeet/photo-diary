@@ -3,12 +3,11 @@ module.exports = {
   siteTitle: '记录生活，定格美好',
   siteDescription: '用镜头捕捉每一个值得珍藏的瞬间',
   footer: {
-    html: '© 2026 龚仔的摄影日记 | <a href="https://v.douyin.com/Hc74k9FgjPY/" target="_blank">@龚仔仔仔仔</a>'
-  },
-  contacts: {
-    douyin: 'https://v.douyin.com/Hc74k9FgjPY/',
-    xiaohongshu: 'https://xhslink.com/m/9WzBstwHLKF',
-    email: 'jogt@foxmail.com',
-    wechat: 'GongzVirAug'
+    social: [
+      { label: '小红书', url: 'https://xhslink.com/m/8MA6NoHQesz', brand: 'xiaohongshu' },
+      { label: '抖音', url: 'https://v.douyin.com/owyNGXrRXrA/', brand: 'douyin' },
+      { label: '微信：GongzVirAug' },
+      { label: '邮箱：jogt@foxmail.com', url: 'mailto:jogt@foxmail.com' }
+    ]
   }
 };

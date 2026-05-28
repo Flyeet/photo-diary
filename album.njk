@@ -9,86 +9,129 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://res.cloudinary.com">
-  <meta name="theme-color" content="#e07a5f">
+  <meta name="theme-color" content="#1d1d1f">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="{{ site.siteName }}">
   <style>
-    :root{--bg:#0a0a0e;--card:#121218;--card-hover:#1a1a22;--text:#f0f0f2;--muted:#6b6b7a;--accent:#e07a5f;--border:#1e1e26}
-    [data-theme="light"]{--bg:#f2f2f5;--card:#ffffff;--card-hover:#f0f0f2;--text:#1d1d1f;--muted:#86868b;--accent:#d45a3a;--border:rgba(0,0,0,0.08)}
+    :root{--bg:#ffffff;--card:#f5f5f7;--card-hover:#eeeef0;--text:#1d1d1f;--muted:#86868b;--accent:#d45a3a;--border:rgba(0,0,0,0.08);--blur-bg:rgba(255,255,255,0.8);--overlay:linear-gradient(to top,rgba(0,0,0,.5) 0%,transparent 60%)}
+    [data-theme="dark"]{--bg:#08080c;--card:#111116;--card-hover:#1a1a20;--text:#f5f5f7;--muted:#6b6b7a;--accent:#e07a5f;--border:#1e1e26;--blur-bg:rgba(8,8,12,0.8);--overlay:linear-gradient(to top,rgba(0,0,0,.6) 0%,transparent 60%)}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
-    body{background:var(--bg);color:var(--text);font-family:'Inter','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+    body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','PingFang SC','Helvetica Neue',sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;letter-spacing:0.01em}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
     ::selection{background:var(--accent);color:#fff}
-    ::-webkit-scrollbar{width:8px}
-    ::-webkit-scrollbar-track{background:var(--bg)}
-    ::-webkit-scrollbar-thumb{background:var(--card);border-radius:4px}
-    ::-webkit-scrollbar-thumb:hover{background:var(--card-hover)}
-    .site-header{padding:20px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;background:linear-gradient(to bottom,var(--bg) 60%,transparent);backdrop-filter:blur(12px)}
-    .site-header h1{font-size:1.25rem;font-weight:600;letter-spacing:-0.02em;display:flex;align-items:center;gap:10px}
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:rgba(14,165,233,.12);border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:rgba(14,165,233,.2)}
+    .site-header{padding:14px 40px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;background:var(--blur-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .site-header h1{font-size:1rem;font-weight:600;letter-spacing:-0.01em;display:flex;align-items:center;gap:10px}
     .site-header h1 a{transition:opacity .2s}
     .site-header h1 a:hover{opacity:.7}
-    .logo-icon{width:28px;height:28px;background:linear-gradient(135deg,#e07a5f,#f2a07b);border-radius:8px;display:flex;align-items:center;justify-content:center}
-    .container{max-width:1400px;margin:0 auto;padding:20px 40px 60px;flex:1}
-    .back-link{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--muted);font-size:.9rem;transition:all .2s;margin-bottom:32px}
-    .back-link:hover{color:var(--text);border-color:var(--accent);background:var(--card-hover)}
-    .back-link svg{width:18px;height:18px;transition:transform .2s}
-    .back-link:hover svg{transform:translateX(-4px)}
-    .album-header{margin-bottom:40px}
-    .album-date{font-size:2rem;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px}
-    .album-count{color:var(--muted);font-size:1rem;display:flex;align-items:center;gap:8px}
-    .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
-    .photo-item{aspect-ratio:4/3;border-radius:12px;overflow:hidden;cursor:pointer;position:relative;background:var(--card)}
-    .photo-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s,filter .4s}
-    .photo-item::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,transparent 60%,rgba(0,0,0,.3));opacity:0;transition:opacity .3s;z-index:1}
-    .photo-item:hover img{transform:scale(1.08)}
-    .photo-item:hover::before{opacity:1}
-    .pagination{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:60px;padding:20px;flex-wrap:wrap}
-    .pagination button{min-width:44px;height:44px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:0 16px;border-radius:10px;cursor:pointer;transition:all .2s;font-size:.9rem;font-weight:500;display:flex;align-items:center;justify-content:center}
-    .pagination button:hover:not(:disabled){background:var(--card-hover);border-color:var(--accent);transform:translateY(-2px)}
-    .pagination button:disabled{opacity:.35;cursor:not-allowed;transform:none}
-    .pagination .page-info{color:var(--text);font-size:.95rem;padding:0 12px;min-width:80px;text-align:center}
-    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,.96);z-index:1000;display:none;flex-direction:column;align-items:center;justify-content:center}
-    .lightbox.active{display:flex}
-    .lightbox-close{position:absolute;top:24px;right:24px;width:48px;height:48px;background:var(--card);border:none;border-radius:50%;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:1.2rem;border:1px solid var(--border)}
-    .lightbox-close:hover{background:var(--card-hover);border-color:var(--accent)}
-    .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:56px;height:56px;background:var(--card);border:none;border-radius:50%;color:var(--text);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-size:1.4rem;border:1px solid var(--border)}
-    .lightbox-nav:hover{background:var(--card-hover);border-color:var(--accent)}
-    .lightbox-nav.prev{left:24px}
-    .lightbox-nav.next{right:24px}
-    .lightbox-content{max-width:90vw;max-height:80vh;display:flex;align-items:center;justify-content:center}
-    .lightbox-content img{max-width:100%;max-height:80vh;object-fit:contain;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.5);touch-action:pan-y}
-    .lightbox-info{margin-top:20px;text-align:center;padding:0 24px}
-    .lb-counter{color:var(--muted);font-size:.9rem;margin-bottom:4px}
-    .lb-filename{color:var(--text);font-size:.95rem}
-    .site-footer{text-align:center;padding:40px;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem;margin-top:auto}
-    .site-footer a{color:var(--accent);transition:opacity .2s}
-    .site-footer a:hover{opacity:.8}
-    .loading{text-align:center;padding:100px 20px;color:var(--muted)}
-    .loading-spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .theme-toggle{background:var(--card);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;margin-left:auto;flex-shrink:0}
-    .theme-toggle:hover{background:var(--card-hover);border-color:var(--accent)}
+    .logo-icon{width:24px;height:24px;background:linear-gradient(135deg,var(--accent) 0%,#f2a07b 100%);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .header-actions{display:flex;align-items:center;gap:10px}
+    .theme-toggle{background:transparent;border:none;color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .theme-toggle:hover{color:var(--text);background:var(--card)}
     .theme-toggle svg{width:18px;height:18px}
     .sun-icon{display:none}
     .moon-icon{display:block}
-    [data-theme="light"] .sun-icon{display:block}
-    [data-theme="light"] .moon-icon{display:none}
+    [data-theme="dark"] .sun-icon{display:block}
+    [data-theme="dark"] .moon-icon{display:none}
+    .container{max-width:1280px;margin:0 auto;padding:30px 40px 60px;flex:1}
+    .back-link{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:.9rem;transition:all .2s;margin-bottom:28px;padding:6px 0}
+    .back-link:hover{color:var(--accent)}
+    .back-link svg{width:16px;height:16px}
+    .album-header{margin-bottom:36px}
+    .album-date{font-size:2.5rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:6px;color:var(--text)}
+    .album-count{color:var(--muted);font-size:.95rem;display:flex;align-items:center;gap:6px}
+    .photo-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px}
+    .photo-item{aspect-ratio:3/2;border-radius:14px;overflow:hidden;cursor:pointer;position:relative;background:var(--card);transition:transform .4s cubic-bezier(.16,1,.3,1),box-shadow .4s ease;will-change:transform}
+    .photo-item:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,.08)}
+    .photo-item img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1)}
+    .photo-item:hover img{transform:scale(1.05)}
+    .photo-exif{position:absolute;bottom:0;left:0;right:0;padding:50px 14px 12px;background:linear-gradient(to top,rgba(0,0,0,.65) 0%,transparent 100%);opacity:0;transition:opacity .3s ease;pointer-events:none}
+    .photo-item:hover .photo-exif{opacity:1}
+    .photo-exif .exif-filename{color:rgba(255,255,255,.6);font-size:.68rem;margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .photo-exif .exif-row{display:flex;gap:10px;flex-wrap:wrap;color:#fff;font-size:.72rem;letter-spacing:.02em}
+    .photo-exif .exif-row span{display:flex;align-items:center;gap:3px;opacity:.9}
+    .pagination{display:flex;justify-content:center;align-items:center;gap:4px;margin-top:60px;padding:20px;flex-wrap:wrap}
+    .pagination button{min-width:36px;height:36px;background:transparent;border:none;color:var(--muted);padding:0 12px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:.9rem;font-weight:500;display:flex;align-items:center;justify-content:center}
+    .pagination button:hover:not(:disabled){color:var(--text);background:var(--card)}
+    .pagination button:disabled{opacity:.3;cursor:not-allowed}
+    .pagination button.active{color:var(--accent);font-weight:600}
+    .pagination .page-info{color:var(--muted);font-size:.85rem;padding:0 8px;min-width:60px;text-align:center}
+    .lightbox{position:fixed;inset:0;background:#000;z-index:1000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s ease}
+    .lightbox.active{opacity:1;pointer-events:auto}
+    .lightbox-close{position:absolute;top:24px;right:24px;width:40px;height:40px;background:rgba(255,255,255,.08);border:none;border-radius:50%;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;font-size:1.2rem;z-index:10}
+    .lightbox-close:hover{background:rgba(255,255,255,.18);transform:scale(1.05)}
+    .lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;background:rgba(255,255,255,.06);border:none;border-radius:50%;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;font-size:1.3rem;z-index:10;opacity:0}
+    .lightbox.active .lightbox-nav{opacity:1}
+    .lightbox-nav:hover{background:rgba(255,255,255,.14)}
+    .lightbox-nav.prev{left:24px}
+    .lightbox-nav.next{right:24px}
+    .lightbox-content{max-width:94vw;max-height:90vh;display:flex;align-items:center;justify-content:center;position:relative;width:100%;overflow:hidden}
+    .lightbox-content img{max-width:100%;max-height:90vh;object-fit:contain;border-radius:4px;opacity:0;touch-action:none;cursor:zoom-in;will-change:transform;transition:opacity .3s ease}
+    .lightbox-content img.loaded{opacity:1}
+    .lightbox-content img.panning{cursor:grabbing;transition:none!important}
+    .lightbox-content img.zoomed{cursor:grab;transition:none!important}
+    .lb-zoom{position:absolute;bottom:80px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:3px 12px;border-radius:8px;color:#fff;font-size:.72rem;pointer-events:none;opacity:0;transition:opacity .25s;z-index:6}
+    .lb-zoom.show{opacity:1}
+    .lightbox-info{position:absolute;bottom:0;left:0;right:0;padding:50px 30px 28px;background:linear-gradient(to top,rgba(0,0,0,.7) 0%,transparent 100%);display:flex;justify-content:space-between;align-items:flex-end;pointer-events:none;transition:opacity .3s}
+    .lightbox-info.hidden{opacity:0}
+    .lb-info-left{text-align:left}
+    .lb-info-right{text-align:right}
+    .lb-filename{color:#fff;font-size:.85rem;font-weight:500;letter-spacing:.01em}
+    .lb-exif{color:rgba(255,255,255,.55);font-size:.75rem;margin-top:5px;display:flex;gap:14px;flex-wrap:wrap}
+    .lb-exif span{display:flex;align-items:center;gap:3px}
+    .lb-download{position:absolute;top:24px;right:72px;width:40px;height:40px;background:rgba(255,255,255,.08);border:none;border-radius:50%;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;font-size:1rem;z-index:10;text-decoration:none}
+    .lb-download:hover{background:rgba(255,255,255,.18);transform:scale(1.05)}
+    .lb-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(0,0,0,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);padding:14px 24px;border-radius:12px;color:#fff;font-size:.8rem;display:flex;gap:18px;pointer-events:none;opacity:0;transition:opacity .4s ease;z-index:5;white-space:nowrap}
+    .lb-hint.show{opacity:1}
+    .lb-hint span{display:flex;align-items:center;gap:6px}
+    .lb-hint kbd{background:rgba(255,255,255,.15);padding:2px 7px;border-radius:4px;font-family:inherit;font-size:.72rem;min-width:22px;text-align:center;line-height:1.4}
+    .footer{background:#f5f5f7;border-top:1px solid #e8e8ed;margin-top:auto}
+    [data-theme=dark] .footer{background:#1a1a1a;border-top-color:#2c2c2e}
+    .footer-inner{max-width:980px;margin:0 auto;padding:20px 22px 24px;text-align:center}
+    .footer-copy{font-size:12px;color:#86868b;margin-bottom:8px;letter-spacing:.1px}
+    .footer-contact{font-size:11px;color:#86868b;margin-top:8px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 10px}
+    .contact-sep{color:#aeaeb2;margin:0 2px;-webkit-user-select:none;user-select:none}
+    .footer-link{color:#0ea5e9;text-decoration:none;font-weight:500;position:relative;transition:color .2s}
+    .footer-link::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;background:#0ea5e9;transform:scaleX(0);transform-origin:right;transition:transform .25s ease}
+    .footer-link:hover::after{transform:scaleX(1);transform-origin:left}
+    .footer-link:hover{color:#0284c7}
+    .footer-link--red{color:#ff2442}
+    .footer-link--red::after{background:#ff2442}
+    .footer-link--red:hover{color:#d41b36}
+    .footer-link--douyin{display:inline-flex;align-items:center;padding:1px 8px;background:#010101;color:#fff;border-radius:10px;font-weight:600;text-decoration:none;letter-spacing:.5px;transition:opacity .2s}
+    .footer-link--douyin:hover{color:#fff;opacity:.8}
+    .footer-link--douyin::after{display:none}
+    .footer-contact span{color:#86868b}
+    .back-top{position:fixed;bottom:80px;right:24px;z-index:50;width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;opacity:0;pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+    .back-top.show{opacity:1;pointer-events:auto}
+    .back-top:hover{color:var(--accent);border-color:var(--accent)}
+    .back-top svg{width:18px;height:18px}
+    .loading{text-align:center;padding:100px 20px;color:var(--muted)}
+    .loading-spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px}
+    @keyframes spin{to{transform:rotate(360deg)}}
     @media(max-width:768px){
-      .site-header{padding:16px 20px}
-      .container{padding:16px 20px 40px}
-      .album-date{font-size:1.5rem}
-      .photo-grid{grid-template-columns:repeat(2,1fr);gap:10px}
-      .back-link{margin-bottom:24px;padding:8px 14px;font-size:.85rem}
-      .lightbox-nav{width:44px;height:44px;display:none}
-      .lightbox-nav.prev{left:12px}
-      .lightbox-nav.next{right:12px}
-      .lightbox-close{top:16px;right:16px;width:40px;height:40px;display:none}
+      .site-header{padding:12px 20px}
+      .container{padding:20px 16px 40px}
+      .album-date{font-size:1.8rem}
+      .photo-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+      .photo-exif .exif-filename{font-size:.6rem}
+      .photo-exif .exif-row{font-size:.65rem;gap:6px}
+      .back-link{margin-bottom:20px;font-size:.85rem}
+      .lightbox-nav{width:36px;height:36px;display:none}
+      .lightbox-close{top:14px;right:14px;width:36px;height:36px;font-size:1rem}
+      .lightbox-info{padding:36px 16px 20px}
+      .lb-filename{font-size:.78rem}
+      .lb-exif{font-size:.7rem;gap:8px;margin-top:3px}
     }
     @media(max-width:480px){
       .photo-grid{grid-template-columns:repeat(2,1fr);gap:8px}
+      .back-top{bottom:60px;right:14px;width:34px;height:34px}
     }
   </style>
 </head>
@@ -96,7 +139,7 @@
   <header class="site-header">
     <h1>
       <span class="logo-icon">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
           <circle cx="12" cy="12" r="10"/>
           <circle cx="12" cy="12" r="4"/>
           <circle cx="19" cy="8" r="2" fill="#fff" stroke="none"/>
@@ -104,15 +147,17 @@
       </span>
       <a href="/">{{ site.siteName }}</a>
     </h1>
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
-      <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-      <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
+    <div class="header-actions">
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
   </header>
   <main class="container">
     <a href="/" class="back-link">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
-      返回相册
+      返回
     </a>
     <div id="loadingState" class="loading">
       <div class="loading-spinner"></div>
@@ -127,24 +172,54 @@
       <div class="pagination" id="pagination"></div>
     </div>
   </main>
+  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
   <div id="lightbox" class="lightbox">
-    <button class="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
-    <button class="lightbox-nav prev" onclick="prevImage()">&#x276E;</button>
-    <button class="lightbox-nav next" onclick="nextImage()">&#x276F;</button>
+    <button class="lightbox-close" onclick="closeLightbox()" aria-label="关闭">&#x2715;</button>
+    <a class="lb-download" id="lb-download" href="#" download target="_blank" rel="noopener" aria-label="下载原图">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+    </a>
+    <button class="lightbox-nav prev" onclick="prevImage()" aria-label="上一张">&#x276E;</button>
+    <button class="lightbox-nav next" onclick="nextImage()" aria-label="下一张">&#x276F;</button>
     <div class="lightbox-content">
       <img id="lb-img" src="" alt="">
+      <div class="lb-hint" id="lb-hint">
+        <span><kbd>&larr;</kbd> <kbd>&rarr;</kbd> 切换</span>
+        <span><kbd>ESC</kbd> 关闭</span>
+        <span><kbd>空格</kbd> 信息</span>
+      </div>
+      <div class="lb-zoom" id="lb-zoom">100%</div>
     </div>
-    <div class="lightbox-info">
-      <p id="lb-counter" class="lb-counter"></p>
-      <p id="lb-filename" class="lb-filename"></p>
+    <div class="lightbox-info" id="lb-info">
+      <div class="lb-info-left">
+        <p class="lb-filename" id="lb-filename"></p>
+        <p class="lb-exif" id="lb-exif"></p>
+      </div>
+      <div class="lb-info-right">
+        <p class="lb-counter" id="lb-counter"></p>
+      </div>
     </div>
   </div>
-  <footer class="site-footer">
-    <p>{{ site.footer.html | safe }}</p>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2026 龚仔的摄影日记 <span class="contact-sep">|</span> 定格美妙瞬间</div>
+      <div class="footer-contact">
+        <a class="footer-link footer-link--red" href="https://xhslink.com/m/8MA6NoHQesz" target="_blank" rel="noopener">小红书</a>
+        <span class="contact-sep">·</span>
+        <a class="footer-link--douyin" href="https://v.douyin.com/owyNGXrRXrA/" target="_blank" rel="noopener">抖音</a>
+        <span class="contact-sep">·</span>
+        <span>微信：GongzVirAug</span>
+        <span class="contact-sep">·</span>
+        <span>邮箱：jogt@foxmail.com</span>
+      </div>
+    </div>
   </footer>
   <script>
-    (function(){var t=localStorage.getItem('theme'),d=window.matchMedia('(prefers-color-scheme:dark)').matches;if(t==='light'||(!t&&!d)){document.documentElement.setAttribute('data-theme','light')}})();
-    function toggleTheme(){var l=document.documentElement.getAttribute('data-theme')==='light';if(l){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','dark')}else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('theme','light')}}
+    (function(){var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.removeAttribute('data-theme')}else{document.documentElement.setAttribute('data-theme','dark')}})();
+    function toggleTheme(){var l=document.documentElement.getAttribute('data-theme')==='dark';if(l){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','light')}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('theme','dark')}}
+    function srcset(url,w){return url.replace('f_auto,q_auto','w_'+w+',f_auto,q_auto')+' '+w+'w'}
+    function blurUrl(url){return url.replace('/upload/','/upload/w_30,e_blur:200,f_auto,q_auto/')}
     var SITE_NAME = '{{ site.siteName }}';
     const pathParts = window.location.pathname.split('/').filter(Boolean);
     const folder = decodeURIComponent(pathParts[1] || pathParts[0] || '');
@@ -189,11 +264,25 @@
       }
     }
 
-    function createPhotoItem(img, index) {
-      const div = document.createElement('div');
+    function createPhotoItem(imgData, index) {
+      var div = document.createElement('div');
       div.className = 'photo-item';
-      div.innerHTML = '<img src="' + img.url + '" alt="' + img.filename + '" loading="lazy">';
-      div.addEventListener('click', () => { openLightbox(index); });
+      div.style.background = 'url(' + blurUrl(imgData.url) + ') center/cover no-repeat var(--card)';
+
+      var exifHtml = '<div class="photo-exif"><div class="exif-filename">' + imgData.filename + '</div>';
+      var meta = imgData.metadata;
+      if (meta && (meta.camera || meta.aperture || meta.focalLength || meta.iso)) {
+        exifHtml += '<div class="exif-row">';
+        if (meta.camera) exifHtml += '<span>' + meta.camera.split(' ').slice(-1)[0] + '</span>';
+        if (meta.aperture) exifHtml += '<span>' + meta.aperture + '</span>';
+        if (meta.focalLength) exifHtml += '<span>' + meta.focalLength.replace('.0','') + '</span>';
+        if (meta.iso) exifHtml += '<span>' + meta.iso + '</span>';
+        exifHtml += '</div>';
+      }
+      exifHtml += '</div>';
+
+      div.innerHTML = '<img src="' + imgData.url + '" alt="' + imgData.filename + '" loading="lazy" srcset="' + [400,800,1200].map(function(w){ return srcset(imgData.url,w); }).join(',') + '" sizes="(max-width:768px) 50vw, (max-width:1024px) 33vw, 25vw" style="opacity:0;transition:opacity .4s" onload="this.style.opacity=1">' + exifHtml;
+      div.addEventListener('click', function(){ openLightbox(index); });
       return div;
     }
 
@@ -209,55 +298,58 @@
       }
 
       renderPagination();
+      preloadNextPhotos(page);
+    }
+
+    function preloadNextPhotos(page) {
+      if (page >= totalPages) return;
+      var start = page * PER_PAGE;
+      var end = Math.min(start + PER_PAGE, images.length);
+      for (var i = start; i < end; i++) {
+        var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = images[i].url; document.head.appendChild(l);
+      }
     }
 
     function renderPagination() {
       pagination.innerHTML = '';
       if (totalPages <= 1) return;
 
-      const firstBtn = document.createElement('button');
-      firstBtn.innerHTML = '&#x23EE;';
-      firstBtn.title = '首页';
-      firstBtn.disabled = currentPage === 1;
-      firstBtn.onclick = () => { currentPage = 1; renderPage(1); window.scrollTo({top:0, behavior:'smooth'}); };
-
-      const prevBtn = document.createElement('button');
-      prevBtn.innerHTML = '&#x25C0;';
-      prevBtn.title = '上一页';
-      prevBtn.disabled = currentPage === 1;
-      prevBtn.onclick = () => { currentPage--; renderPage(currentPage); window.scrollTo({top:0, behavior:'smooth'}); };
-
-      const info = document.createElement('span');
-      info.className = 'page-info';
-      info.textContent = currentPage + ' / ' + totalPages;
-
-      const nextBtn = document.createElement('button');
-      nextBtn.innerHTML = '&#x25B6;';
-      nextBtn.title = '下一页';
-      nextBtn.disabled = currentPage === totalPages;
-      nextBtn.onclick = () => { currentPage++; renderPage(currentPage); window.scrollTo({top:0, behavior:'smooth'}); };
-
-      const lastBtn = document.createElement('button');
-      lastBtn.innerHTML = '&#x23ED;';
-      lastBtn.title = '末页';
-      lastBtn.disabled = currentPage === totalPages;
-      lastBtn.onclick = () => { currentPage = totalPages; renderPage(totalPages); window.scrollTo({top:0, behavior:'smooth'}); };
-
-      pagination.appendChild(firstBtn);
-      pagination.appendChild(prevBtn);
-      pagination.appendChild(info);
-      pagination.appendChild(nextBtn);
-      pagination.appendChild(lastBtn);
+      for (var p = 1; p <= totalPages; p++) {
+        var btn = document.createElement('button');
+        btn.textContent = p;
+        btn.className = p === currentPage ? 'active' : '';
+        btn.onclick = (function(page){ return function(){ currentPage = page; renderPage(page); window.scrollTo({top:0, behavior:'smooth'}); }; })(p);
+        pagination.appendChild(btn);
+      }
     }
+
+    // Back to top
+    window.addEventListener('scroll', function(){ document.getElementById('backTop').classList.toggle('show', window.scrollY > 400); });
 
     loadAlbum();
 
+    function getDownloadUrl(url) { return url.replace('/upload/f_auto,q_auto/', '/upload/fl_attachment/'); }
+
+    var hintShown = false;
     function openLightbox(index) {
       currentIndex = index;
-      updateLightbox();
       document.getElementById('lightbox').classList.add('active');
       document.body.style.overflow = 'hidden';
+      updateLightbox();
       history.replaceState(null, '', '#photo-' + (index + 1));
+      // show keyboard hint briefly
+      if (!hintShown) {
+        hintShown = true;
+        var hint = document.getElementById('lb-hint');
+        hint.classList.add('show');
+        setTimeout(function(){ hint.classList.remove('show'); }, 2800);
+      }
+      // auto-hide info after 3s on mobile
+      if (window.innerWidth < 768) {
+        clearTimeout(window._infoTimer);
+        document.getElementById('lb-info').classList.remove('hidden');
+        window._infoTimer = setTimeout(function(){ document.getElementById('lb-info').classList.add('hidden'); }, 3000);
+      }
     }
 
     function closeLightbox() {
@@ -267,32 +359,82 @@
     }
 
     function updateLightbox() {
-      document.getElementById('lb-img').src = images[currentIndex].url;
-      document.getElementById('lb-filename').textContent = images[currentIndex].filename;
+      resetZoom();
+      const img = document.getElementById('lb-img');
+      img.classList.remove('loaded');
+      img.onload = function(){ this.classList.add('loaded'); };
+      img.src = images[currentIndex].url + '#t=' + Date.now();
+
+      const data = images[currentIndex];
+      document.getElementById('lb-filename').textContent = data.filename;
       document.getElementById('lb-counter').textContent = (currentIndex + 1) + ' / ' + images.length;
-      history.replaceState(null, '', '#photo-' + (currentIndex + 1));
+      document.getElementById('lb-download').href = getDownloadUrl(data.url);
+
+      var meta = data.metadata;
+      var exifEl = document.getElementById('lb-exif');
+      if (meta && (meta.camera || meta.aperture || meta.focalLength || meta.iso || meta.shutter)) {
+        var parts = [];
+        if (meta.camera) parts.push('<span>' + meta.camera + '</span>');
+        if (meta.aperture) parts.push('<span>' + meta.aperture + '</span>');
+        if (meta.focalLength) parts.push('<span>' + meta.focalLength + '</span>');
+        if (meta.iso) parts.push('<span>' + meta.iso + '</span>');
+        if (meta.shutter) parts.push('<span>' + meta.shutter + '</span>');
+        exifEl.innerHTML = parts.join('');
+        exifEl.style.display = '';
+      } else {
+        exifEl.style.display = 'none';
+      }
+
       preloadAdjacent();
     }
 
     function preloadAdjacent() {
       var next = (currentIndex + 1) % images.length;
       var prev = (currentIndex - 1 + images.length) % images.length;
-      var img1 = new Image(); img1.src = images[next].url;
-      var img2 = new Image(); img2.src = images[prev].url;
+      ['next','prev'].forEach(function(dir){
+        var idx = dir === 'next' ? next : prev;
+        var link = document.createElement('link');
+        link.rel = 'preload';
+        link.as = 'image';
+        link.href = images[idx].url;
+        document.head.appendChild(link);
+      });
     }
 
-    function prevImage() {
-      currentIndex = (currentIndex - 1 + images.length) % images.length;
-      updateLightbox();
+    function prevImage() { currentIndex = (currentIndex - 1 + images.length) % images.length; updateLightbox(); }
+    function nextImage() { currentIndex = (currentIndex + 1) % images.length; updateLightbox(); }
+
+    // Zoom & Pan
+    var zoom = 1, panX = 0, panY = 0, isPanning = false, pStartX, pStartY, pMX, pMY;
+
+    function resetZoom() { zoom = 1; panX = 0; panY = 0; applyZoom(); }
+
+    function applyZoom() {
+      var img = document.getElementById('lb-img');
+      img.classList.remove('zoomed', 'panning');
+      if (zoom <= 1) {
+        img.style.transform = '';
+      } else {
+        img.style.transform = 'scale(' + zoom + ') translate(' + panX + 'px,' + panY + 'px)';
+        img.classList.add(isPanning ? 'panning' : 'zoomed');
+      }
     }
 
-    function nextImage() {
-      currentIndex = (currentIndex + 1) % images.length;
-      updateLightbox();
+    function showZoomPct() {
+      var el = document.getElementById('lb-zoom');
+      el.textContent = Math.round(zoom * 100) + '%';
+      el.classList.add('show');
+      clearTimeout(el._t);
+      el._t = setTimeout(function(){ el.classList.remove('show'); }, 900);
     }
 
     document.getElementById('lightbox').addEventListener('click', function(e) {
-      if (e.target.id === 'lightbox') closeLightbox();
+      if (e.target === e.currentTarget) closeLightbox();
+    });
+
+    document.getElementById('lb-img').addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.getElementById('lb-info').classList.toggle('hidden');
     });
 
     document.addEventListener('keydown', function(e) {
@@ -300,30 +442,101 @@
       if (e.key === 'Escape') closeLightbox();
       if (e.key === 'ArrowLeft') prevImage();
       if (e.key === 'ArrowRight') nextImage();
+      if (e.key === ' ') { e.preventDefault(); document.getElementById('lb-info').classList.toggle('hidden'); }
     });
 
-    let touchStartX = 0;
-    let touchEndX = 0;
+    // Wheel zoom
+    document.getElementById('lightbox').addEventListener('wheel', function(e) {
+      if (!document.getElementById('lightbox').classList.contains('active')) return;
+      if (e.target.closest('.lightbox-nav') || e.target.closest('.lightbox-close') || e.target.closest('.lb-download')) return;
+      e.preventDefault();
+      var d = e.deltaY < 0 ? 0.1 : -0.1;
+      zoom = Math.max(1, Math.min(5, zoom + d));
+      applyZoom();
+      showZoomPct();
+    }, { passive: false });
+
+    // Pan on mousedown
+    document.getElementById('lb-img').addEventListener('mousedown', function(e) {
+      if (zoom <= 1 || e.button !== 0) return;
+      isPanning = true;
+      pStartX = panX; pStartY = panY;
+      pMX = e.clientX; pMY = e.clientY;
+      this.classList.add('panning');
+      e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function(e) {
+      if (!isPanning) return;
+      panX = pStartX + (e.clientX - pMX) / zoom;
+      panY = pStartY + (e.clientY - pMY) / zoom;
+      applyZoom();
+    });
+
+    document.addEventListener('mouseup', function() {
+      if (isPanning) { isPanning = false; applyZoom(); }
+    });
+
+    // Double-click reset
+    document.getElementById('lb-img').addEventListener('dblclick', function(e) {
+      e.preventDefault();
+      if (zoom > 1) { resetZoom(); showZoomPct(); }
+      else { zoom = 2; applyZoom(); showZoomPct(); }
+    });
+
+    // Swipe
+    let touchStartX = 0, touchEndX = 0, touchStartY = 0;
     const SWIPE_THRESHOLD = 50;
 
     document.getElementById('lightbox').addEventListener('touchstart', function(e) {
-      touchStartX = e.changedTouches[0].screenX;
+      if (e.touches.length === 1) {
+        touchStartX = e.changedTouches[0].screenX;
+        touchStartY = e.changedTouches[0].screenY;
+      }
     }, { passive: true });
 
     document.getElementById('lightbox').addEventListener('touchend', function(e) {
-      touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
+      if (e.changedTouches.length === 1) {
+        touchEndX = e.changedTouches[0].screenX;
+        var dy = Math.abs(e.changedTouches[0].screenY - touchStartY);
+        var dx = Math.abs(touchStartX - touchEndX);
+        if (dx > SWIPE_THRESHOLD && dx > dy * 2) {
+          if (touchStartX - touchEndX > 0) nextImage(); else prevImage();
+        }
+      }
     }, { passive: true });
 
-    function handleSwipe() {
-      const diff = touchStartX - touchEndX;
-      if (Math.abs(diff) < SWIPE_THRESHOLD) return;
-      if (diff > 0) {
-        nextImage();
-      } else {
-        prevImage();
+    // Pinch zoom (touch)
+    var lastDist = 0;
+    document.getElementById('lightbox').addEventListener('touchmove', function(e) {
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        var dx = e.touches[0].clientX - e.touches[1].clientX;
+        var dy = e.touches[0].clientY - e.touches[1].clientY;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (lastDist) {
+          zoom = Math.max(1, Math.min(5, zoom + (dist - lastDist) * 0.01));
+          applyZoom();
+          showZoomPct();
+        }
+        lastDist = dist;
       }
-    }
+    }, { passive: false });
+
+    document.getElementById('lightbox').addEventListener('touchend', function() { lastDist = 0; }, { passive: true });
+
+    // Mouse move shows/hides nav on desktop
+    var navTimer;
+    document.getElementById('lightbox').addEventListener('mousemove', function() {
+      var navs = document.querySelectorAll('.lightbox-nav');
+      navs.forEach(function(n){ n.style.opacity = '1'; });
+      clearTimeout(navTimer);
+      navTimer = setTimeout(function(){
+        if (document.getElementById('lightbox').classList.contains('active')) {
+          navs.forEach(function(n){ n.style.opacity = '0'; });
+        }
+      }, 2000);
+    });
   </script>
 </body>
 </html>

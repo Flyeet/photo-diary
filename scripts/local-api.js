@@ -22,7 +22,7 @@ const app = express();
 app.use(cors());
 app.use(express.static('_site'));
 
-app.get('/:folder', (req, res) => {
+app.get('/album/*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '_site', 'album', 'index.html'));
 });
 
@@ -79,7 +79,7 @@ async function getAlbums() {
       date: a.folderName,
       title: a.folderName,
       coverImage: a.images[0]?.url || '',
-      url: `/${a.folderName}/`
+      url: a.folderName
     }));
 }
 
@@ -88,13 +88,26 @@ async function getAlbum(folder) {
     .expression(`resource_type:image AND folder:"${folder}"`)
     .sort_by('created_at', 'asc')
     .max_results(2500)
+    .with_field('image_metadata')
     .execute();
+
+  function parseExif(meta) {
+    if (!meta) return null;
+    const m = {};
+    if (meta['exif:Make'] || meta['exif:Model']) m.camera = [meta['exif:Make'], meta['exif:Model']].filter(Boolean).join(' ');
+    if (meta['exif:FNumber']) m.aperture = 'f/' + parseFloat(meta['exif:FNumber']).toFixed(1);
+    if (meta['exif:FocalLength']) m.focalLength = meta['exif:FocalLength'].replace('.0', '');
+    if (meta['exif:ISOSpeedRatings']) m.iso = 'ISO ' + meta['exif:ISOSpeedRatings'];
+    if (meta['exif:ExposureTime']) m.shutter = meta['exif:ExposureTime'];
+    return Object.keys(m).length ? m : null;
+  }
 
   return result.resources.map(r => ({
     url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${r.version}/${r.public_id}.${r.format}`,
     filename: r.display_name || r.public_id.split('/').pop(),
     width: r.width,
-    height: r.height
+    height: r.height,
+    metadata: parseExif(r.image_metadata)
   }));
 }
 

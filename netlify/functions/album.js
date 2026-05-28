@@ -32,9 +32,21 @@ exports.handler = async function(event, context) {
       .expression(`resource_type:image AND folder:"${folder}"`)
       .sort_by('created_at', 'asc')
       .max_results(500)
+      .with_field('image_metadata')
       .execute();
 
     const resources = result.resources || [];
+
+    function parseExif(meta) {
+      if (!meta) return null;
+      const m = {};
+      if (meta['exif:Make'] || meta['exif:Model']) m.camera = [meta['exif:Make'], meta['exif:Model']].filter(Boolean).join(' ');
+      if (meta['exif:FNumber']) m.aperture = 'f/' + parseFloat(meta['exif:FNumber']).toFixed(1);
+      if (meta['exif:FocalLength']) m.focalLength = meta['exif:FocalLength'].replace('.0', '');
+      if (meta['exif:ISOSpeedRatings']) m.iso = 'ISO ' + meta['exif:ISOSpeedRatings'];
+      if (meta['exif:ExposureTime']) m.shutter = meta['exif:ExposureTime'];
+      return Object.keys(m).length ? m : null;
+    }
 
     const images = resources.map(resource => {
       const originalFilename = resource.display_name || resource.public_id.split('/').pop();
@@ -46,7 +58,8 @@ exports.handler = async function(event, context) {
         width: resource.width,
         height: resource.height,
         createdAt: resource.created_at,
-        bytes: resource.bytes
+        bytes: resource.bytes,
+        metadata: parseExif(resource.image_metadata)
       };
     });
 

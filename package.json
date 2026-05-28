@@ -7,7 +7,9 @@
     "dev": "node scripts/local-api.js"
   },
   "devDependencies": {
-    "@11ty/eleventy": "^2.0.0"
+    "@11ty/eleventy": "^2.0.0",
+    "pify": "^4.0.1",
+    "uc.micro": "^1.0.6"
   },
   "dependencies": {
     "cloudinary": "^2.9.0",

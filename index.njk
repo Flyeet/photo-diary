@@ -10,36 +10,44 @@
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="manifest" href="/manifest.json">
   <link rel="preconnect" href="https://res.cloudinary.com">
-  <meta name="theme-color" content="#e07a5f">
+  <meta name="theme-color" content="#1d1d1f">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="{{ site.siteName }}">
   <style>
-    :root{--bg:#08080c;--card:#111116;--card-hover:#1a1a20;--text:#f5f5f7;--muted:#6b6b7a;--accent:#e07a5f;--accent-glow:rgba(224,122,95,0.15);--border:#1e1e26}
-    [data-theme="light"]{--bg:#f2f2f5;--card:#ffffff;--card-hover:#f0f0f2;--text:#1d1d1f;--muted:#86868b;--accent:#d45a3a;--accent-glow:rgba(212,90,58,0.12);--border:rgba(0,0,0,0.08)}
+    :root{--bg:#ffffff;--card:#f5f5f7;--card-hover:#eeeef0;--text:#1d1d1f;--muted:#86868b;--accent:#d45a3a;--accent-glow:rgba(212,90,58,0.12);--border:rgba(0,0,0,0.08);--blur-bg:rgba(255,255,255,0.8)}
+    [data-theme="dark"]{--bg:#08080c;--card:#111116;--card-hover:#1a1a20;--text:#f5f5f7;--muted:#6b6b7a;--accent:#e07a5f;--accent-glow:rgba(224,122,95,0.15);--border:#1e1e26;--blur-bg:rgba(8,8,12,0.8)}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
-    body{background:var(--bg);color:var(--text);font-family:'Inter','PingFang SC','Microsoft YaHei',sans-serif;line-height:1.7;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+    body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','PingFang SC','Helvetica Neue',sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;letter-spacing:0.01em}
     a{color:inherit;text-decoration:none}
     img{max-width:100%;display:block}
     ::selection{background:var(--accent);color:#fff}
     ::-webkit-scrollbar{width:6px}
     ::-webkit-scrollbar-track{background:transparent}
-    ::-webkit-scrollbar-thumb{background:var(--card);border-radius:3px}
-    ::-webkit-scrollbar-thumb:hover{background:var(--card-hover)}
-    .site-header{padding:24px 48px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:100;background:linear-gradient(to bottom,var(--bg) 0%,var(--bg) 50%,transparent 100%);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
-    .site-header h1{font-size:1.2rem;font-weight:600;letter-spacing:-0.02em;display:flex;align-items:center;gap:12px}
-    .site-header h1 a{transition:all .3s ease}
-    .site-header h1 a:hover{opacity:.8}
-    .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent) 0%,#f2a07b 100%);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px var(--accent-glow);transition:transform .3s ease,box-shadow .3s ease}
-    .logo-icon:hover{transform:scale(1.08);box-shadow:0 6px 30px var(--accent-glow)}
-    .container{max-width:1400px;margin:0 auto;padding:140px 48px 80px;flex:1}
-    .hero{text-align:center;padding:0 20px 80px}
-    .hero h1{font-size:3.2rem;font-weight:700;letter-spacing:-0.04em;margin-bottom:16px;background:linear-gradient(135deg,var(--text) 0%,var(--muted) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-    .hero p{color:var(--muted);font-size:1.15rem;max-width:480px;margin:0 auto;letter-spacing:0.02em}
-    .albums{display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:28px}
-    .album{background:var(--card);border-radius:20px;overflow:hidden;cursor:pointer;border:1px solid var(--border);transition:all .4s cubic-bezier(.25,.46,.45,.94);opacity:0;transform:translateY(20px);animation:fadeInUp .5s ease forwards}
-    .album:hover{transform:translateY(-10px);box-shadow:0 30px 80px rgba(0,0,0,.5),0 0 0 1px var(--accent);border-color:var(--accent)}
+    ::-webkit-scrollbar-thumb{background:rgba(14,165,233,.12);border-radius:3px}
+    ::-webkit-scrollbar-thumb:hover{background:rgba(14,165,233,.2)}
+    .site-header{padding:16px 48px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:100;background:var(--blur-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .site-header h1{font-size:1rem;font-weight:600;letter-spacing:-0.01em;display:flex;align-items:center;gap:10px}
+    .site-header h1 a{transition:opacity .2s}
+    .site-header h1 a:hover{opacity:.7}
+    .logo-icon{width:24px;height:24px;background:linear-gradient(135deg,var(--accent) 0%,#f2a07b 100%);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .header-actions{display:flex;align-items:center;gap:10px}
+    .theme-toggle{background:transparent;border:none;color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+    .theme-toggle:hover{color:var(--text);background:var(--card)}
+    .theme-toggle svg{width:18px;height:18px}
+    .sun-icon{display:none}
+    .moon-icon{display:block}
+    [data-theme="dark"] .sun-icon{display:block}
+    [data-theme="dark"] .moon-icon{display:none}
+    .container{max-width:1280px;margin:0 auto;padding:100px 40px 60px;flex:1}
+    .hero{text-align:center;padding:80px 20px 70px;position:relative}
+    .hero::before{content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);pointer-events:none;z-index:0}
+    .hero h1{font-size:4rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:16px;color:var(--text);position:relative;z-index:1}
+    .hero p{color:var(--muted);font-size:1.2rem;max-width:480px;margin:0 auto;letter-spacing:0.02em;line-height:1.5;position:relative;z-index:1}
+    .albums{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+    .album{border-radius:16px;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(24px);animation:fadeInUp .6s cubic-bezier(.16,1,.3,1) forwards;transition:transform .35s ease,box-shadow .35s ease;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+    .album:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.07)}
     @keyframes fadeInUp{to{opacity:1;transform:translateY(0)}}
     .album:nth-child(1){animation-delay:.05s}
     .album:nth-child(2){animation-delay:.1s}
@@ -53,54 +61,67 @@
     .album:nth-child(10){animation-delay:.5s}
     .album:nth-child(11){animation-delay:.55s}
     .album:nth-child(12){animation-delay:.6s}
-    .album-cover{aspect-ratio:16/11;overflow:hidden;position:relative}
-    .album-cover img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.25,.46,.45,.94)}
-    .album:hover .album-cover img{transform:scale(1.1)}
-    .album-cover::after{content:'';position:absolute;bottom:0;left:0;right:0;height:50%;background:linear-gradient(to top,rgba(0,0,0,.5),transparent);pointer-events:none;opacity:0;transition:opacity .4s ease}
-    .album:hover .album-cover::after{opacity:1}
-    .album-info{padding:22px 26px;position:relative}
-    .album-info::before{content:'';position:absolute;top:0;left:26px;right:26px;height:1px;background:linear-gradient(90deg,transparent,var(--border),transparent);transition:background .4s ease}
-    .album:hover .album-info::before{background:linear-gradient(90deg,transparent,var(--accent),transparent)}
-    .album-date{font-size:1.2rem;font-weight:600;margin-bottom:6px;letter-spacing:-0.01em;transition:color .3s ease}
-    .album:hover .album-date{color:var(--accent)}
-    .album-count{color:var(--muted);font-size:.9rem;display:flex;align-items:center;gap:6px;transition:color .3s ease}
-    .album:hover .album-count{color:var(--text)}
-    .album-count svg{width:16px;height:16px;opacity:.6;transition:opacity .3s ease}
-    .album:hover .album-count svg{opacity:1}
-    .pagination{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:80px;padding:30px;flex-wrap:wrap}
-    .pagination button{min-width:48px;height:48px;background:var(--card);border:1px solid var(--border);color:var(--text);padding:0 18px;border-radius:12px;cursor:pointer;transition:all .3s cubic-bezier(.25,.46,.45,.94);font-size:.95rem;font-weight:500;display:flex;align-items:center;justify-content:center}
-    .pagination button:hover:not(:disabled){background:var(--card-hover);border-color:var(--accent);color:var(--accent);transform:translateY(-3px);box-shadow:0 8px 25px rgba(224,122,95,.2)}
-    .pagination button:disabled{opacity:.3;cursor:not-allowed;transform:none;box-shadow:none}
-    .pagination .page-info{color:var(--text);font-size:.95rem;padding:0 16px;min-width:90px;text-align:center;font-weight:500}
-    .site-footer{text-align:center;padding:50px;border-top:1px solid var(--border);color:var(--muted);font-size:.85rem;margin-top:auto}
-    .site-footer a{color:var(--accent);transition:all .3s ease;position:relative}
-    .site-footer a::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:1px;background:var(--accent);transform:scaleX(0);transition:transform .3s ease}
-    .site-footer a:hover::after{transform:scaleX(1)}
+    .album-cover{aspect-ratio:16/11;overflow:hidden;position:relative;background:var(--card);border-radius:16px}
+    .album-cover img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+    .album:hover .album-cover img{transform:scale(1.04)}
+    .album-cover .placeholder{position:absolute;inset:0;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:3rem;opacity:.4}
+    .album-info{padding:18px 4px 4px;display:flex;justify-content:space-between;align-items:center}
+    .album-date{font-size:1.05rem;font-weight:600;letter-spacing:-0.01em;color:var(--text)}
+    .album-count{color:var(--muted);font-size:.85rem;display:flex;align-items:center;gap:4px;transition:color .2s}
+    .album:hover .album-count{color:var(--accent)}
+    .album-count svg{width:14px;height:14px}
+    .pagination{display:flex;justify-content:center;align-items:center;gap:4px;margin-top:80px;padding:20px;flex-wrap:wrap}
+    .pagination button{min-width:36px;height:36px;background:transparent;border:none;color:var(--muted);padding:0 12px;border-radius:8px;cursor:pointer;transition:all .2s;font-size:.9rem;font-weight:500;display:flex;align-items:center;justify-content:center}
+    .pagination button:hover:not(:disabled){color:var(--text);background:var(--card)}
+    .pagination button:disabled{opacity:.3;cursor:not-allowed}
+    .pagination button.active{color:var(--accent);font-weight:600}
+    .pagination .page-info{color:var(--muted);font-size:.85rem;padding:0 8px;min-width:60px;text-align:center}
+    .footer{background:#f5f5f7;border-top:1px solid #e8e8ed;margin-top:auto}
+    [data-theme=dark] .footer{background:#1a1a1a;border-top-color:#2c2c2e}
+    .footer-inner{max-width:980px;margin:0 auto;padding:20px 22px 24px;text-align:center}
+    .footer-copy{font-size:12px;color:#86868b;margin-bottom:8px;letter-spacing:.1px}
+    .footer-contact{font-size:11px;color:#86868b;margin-top:8px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:4px 10px}
+    .contact-sep{color:#aeaeb2;margin:0 2px;-webkit-user-select:none;user-select:none}
+    .footer-link{color:#0ea5e9;text-decoration:none;font-weight:500;position:relative;transition:color .2s}
+    .footer-link::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:1px;background:#0ea5e9;transform:scaleX(0);transform-origin:right;transition:transform .25s ease}
+    .footer-link:hover::after{transform:scaleX(1);transform-origin:left}
+    .footer-link:hover{color:#0284c7}
+    .footer-link--red{color:#ff2442}
+    .footer-link--red::after{background:#ff2442}
+    .footer-link--red:hover{color:#d41b36}
+    .footer-link--douyin{display:inline-flex;align-items:center;padding:1px 8px;background:#010101;color:#fff;border-radius:10px;font-weight:600;text-decoration:none;letter-spacing:.5px;transition:opacity .2s}
+    .footer-link--douyin:hover{color:#fff;opacity:.8}
+    .footer-link--douyin::after{display:none}
+    .footer-contact span{color:#86868b}
+    .back-top{position:fixed;bottom:80px;right:24px;z-index:50;width:40px;height:40px;border-radius:50%;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .25s;opacity:0;pointer-events:none;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+    .back-top.show{opacity:1;pointer-events:auto}
+    .back-top:hover{color:var(--accent);border-color:var(--accent)}
+    .back-top svg{width:18px;height:18px}
     .loading{text-align:center;padding:120px 20px;color:var(--muted)}
-    .loading-spinner{width:48px;height:48px;border:3px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 20px}
+    .loading-spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px}
     @keyframes spin{to{transform:rotate(360deg)}}
     .empty{text-align:center;padding:100px 20px;color:var(--muted)}
-    .empty-icon{font-size:4rem;margin-bottom:16px;opacity:.5}
-    .theme-toggle{background:var(--card);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .3s;margin-left:auto;flex-shrink:0}
-    .theme-toggle:hover{background:var(--card-hover);border-color:var(--accent)}
-    .theme-toggle svg{width:18px;height:18px}
-    .sun-icon{display:none}
-    .moon-icon{display:block}
-    [data-theme="light"] .sun-icon{display:block}
-    [data-theme="light"] .moon-icon{display:none}
-    @media(max-width:768px){
-      .site-header{padding:16px 20px}
-      .container{padding:120px 20px 60px}
-      .hero{padding:0 0 60px}
-      .hero h1{font-size:2.2rem}
-      .albums{grid-template-columns:repeat(2,1fr);gap:16px}
-      .album-info{padding:16px 18px}
-      .album-date{font-size:1rem}
-      .pagination{margin-top:50px;padding:20px}
+    .empty-icon{font-size:3rem;margin-bottom:12px;opacity:.4}
+    @media(max-width:1024px){
+      .albums{grid-template-columns:repeat(2,1fr);gap:20px}
     }
-    @media(max-width:480px){
-      .albums{grid-template-columns:1fr}
-      .hero h1{font-size:1.8rem}
+    @media(max-width:768px){
+      .site-header{padding:14px 20px}
+      .container{padding:80px 16px 40px}
+      .hero{padding:50px 10px 50px}
+      .hero h1{font-size:2.4rem}
+      .hero p{font-size:1.05rem}
+      .albums{grid-template-columns:repeat(2,1fr);gap:16px}
+      .album-info{padding:12px 2px 2px}
+      .album-date{font-size:.95rem}
+      .pagination{margin-top:50px}
+    }
+    @media(max-width:520px){
+      .albums{grid-template-columns:1fr;gap:20px}
+      .hero h1{font-size:1.9rem}
+      .container{padding:70px 14px 30px}
+      .back-top{bottom:60px;right:14px;width:34px;height:34px}
+    }
     }
   </style>
 </head>
@@ -108,7 +129,7 @@
   <header class="site-header">
     <h1>
       <span class="logo-icon">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
           <circle cx="12" cy="12" r="10"/>
           <circle cx="12" cy="12" r="4"/>
           <circle cx="19" cy="8" r="2" fill="#fff" stroke="none"/>
@@ -116,10 +137,12 @@
       </span>
       <a href="/">{{ site.siteName }}</a>
     </h1>
-    <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
-      <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-      <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-    </button>
+    <div class="header-actions">
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
+        <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+        <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+    </div>
   </header>
   <main class="container">
     <section class="hero">
@@ -131,18 +154,34 @@
       <p>正在加载相册...</p>
     </div>
     <div id="emptyState" class="empty" style="display:none">
-      <div class="empty-icon">📭</div>
+      <div class="empty-icon">📷</div>
       <p>暂无相册</p>
     </div>
     <div class="albums" id="albumGrid" style="display:none"></div>
     <div class="pagination" id="pagination" style="display:none"></div>
   </main>
-  <footer class="site-footer">
-    <p>{{ site.footer.html | safe }}</p>
+  <button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="回到顶部">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m18 15-6-6-6 6"/></svg>
+  </button>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-copy">© 2026 龚仔的摄影日记 <span class="contact-sep">|</span> 定格美妙瞬间</div>
+      <div class="footer-contact">
+        <a class="footer-link footer-link--red" href="https://xhslink.com/m/8MA6NoHQesz" target="_blank" rel="noopener">小红书</a>
+        <span class="contact-sep">·</span>
+        <a class="footer-link--douyin" href="https://v.douyin.com/owyNGXrRXrA/" target="_blank" rel="noopener">抖音</a>
+        <span class="contact-sep">·</span>
+        <span>微信：GongzVirAug</span>
+        <span class="contact-sep">·</span>
+        <span>邮箱：jogt@foxmail.com</span>
+      </div>
+    </div>
   </footer>
   <script>
-    (function(){var t=localStorage.getItem('theme'),d=window.matchMedia('(prefers-color-scheme:dark)').matches;if(t==='light'||(!t&&!d)){document.documentElement.setAttribute('data-theme','light')}})();
-    function toggleTheme(){var l=document.documentElement.getAttribute('data-theme')==='light';if(l){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','dark')}else{document.documentElement.setAttribute('data-theme','light');localStorage.setItem('theme','light')}}
+    (function(){var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.removeAttribute('data-theme')}else{document.documentElement.setAttribute('data-theme','dark')}})();
+    function toggleTheme(){var l=document.documentElement.getAttribute('data-theme')==='dark';if(l){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','light')}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('theme','dark')}}
+    function srcset(url,w){return url.replace('f_auto,q_auto','w_'+w+',f_auto,q_auto')+' '+w+'w'}
+    function blurUrl(url){return url.replace('/upload/','/upload/w_30,e_blur:200,f_auto,q_auto/')}
     const grid = document.getElementById('albumGrid');
     const pagination = document.getElementById('pagination');
     const loading = document.getElementById('loadingState');
@@ -178,73 +217,94 @@
     function renderPage(page) {
       currentPage = page;
       grid.innerHTML = '';
-      const start = (page - 1) * PER_PAGE;
-      const end = Math.min(start + PER_PAGE, albums.length);
+      var start = (page - 1) * PER_PAGE;
+      var end = Math.min(start + PER_PAGE, albums.length);
 
-      for (let i = start; i < end; i++) {
-        const album = albums[i];
-        const coverUrl = album.coverImage || (album.images && album.images[0] && album.images[0].url) || '';
-        const photoCount = album.images ? album.images.length : 0;
-        
-        const article = document.createElement('article');
+      for (var i = start; i < end; i++) {
+        var album = albums[i];
+        var coverUrl = album.coverImage || (album.images && album.images[0] && album.images[0].url) || '';
+        var photoCount = album.images ? album.images.length : 0;
+        var isFirst = i === start;
+        var previewUrls = album.images ? album.images.slice(0, 4).map(function(x){ return x.url; }).filter(Boolean) : [];
+
+        var article = document.createElement('article');
         article.className = 'album';
-        article.innerHTML = `
-          <div class="album-cover">
-            <img src="${coverUrl}" alt="${album.date}" loading="lazy">
-          </div>
-          <div class="album-info">
-            <div class="album-date">${album.date}</div>
-            <div class="album-count">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-              ${photoCount} 张照片
-            </div>
-          </div>
-        `;
-        article.onclick = () => { window.location.href = '/album/' + album.url; };
+
+        var cover = document.createElement('div');
+        cover.className = 'album-cover';
+        if (coverUrl) cover.style.background = 'url(' + blurUrl(coverUrl) + ') center/cover no-repeat';
+
+        var img = document.createElement('img');
+        img.src = coverUrl;
+        img.alt = album.date;
+        img.loading = isFirst ? 'eager' : 'lazy';
+        if (isFirst) img.fetchPriority = 'high';
+        img.sizes = '(max-width:768px) 50vw, (max-width:1024px) 33vw, 25vw';
+        img.srcset = [400, 800, 1200].map(function(w){ return srcset(coverUrl, w); }).join(', ');
+        img.onload = function(){ this.style.opacity = '1'; };
+        if (coverUrl) img.style.opacity = '0';
+
+        cover.appendChild(img);
+
+        // Hover preview
+        if (previewUrls.length > 1) {
+          var hoverTimer;
+          article.addEventListener('mouseenter', function(){
+            var idx = 0;
+            hoverTimer = setInterval(function(){
+              idx = (idx + 1) % previewUrls.length;
+              img.src = previewUrls[idx];
+              img.srcset = [400,800,1200].map(function(w){ return srcset(previewUrls[idx], w); }).join(', ');
+            }, 900);
+          });
+          article.addEventListener('mouseleave', function(){
+            clearInterval(hoverTimer);
+            img.src = coverUrl;
+            img.srcset = [400,800,1200].map(function(w){ return srcset(coverUrl, w); }).join(', ');
+          });
+        }
+
+        var info = document.createElement('div');
+        info.className = 'album-info';
+        info.innerHTML = '<span class="album-date">' + album.date + '</span><span class="album-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>' + photoCount + '</span>';
+
+        article.appendChild(cover);
+        article.appendChild(info);
+        article.onclick = function(){ window.location.href = '/album/' + album.url; };
         grid.appendChild(article);
       }
 
       renderPagination();
+      preloadNextPage(page);
+    }
+
+    function preloadNextPage(page) {
+      if (page >= totalPages) return;
+      var start = page * PER_PAGE;
+      var end = Math.min(start + PER_PAGE, albums.length);
+      for (var i = start; i < end; i++) {
+        var u = albums[i].coverImage || (albums[i].images && albums[i].images[0] && albums[i].images[0].url);
+        if (u) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = u; document.head.appendChild(l); }
+      }
     }
 
     function renderPagination() {
       pagination.innerHTML = '';
       if (totalPages <= 1) return;
 
-      const firstBtn = document.createElement('button');
-      firstBtn.innerHTML = '&#x23EE;';
-      firstBtn.title = '首页';
-      firstBtn.disabled = currentPage === 1;
-      firstBtn.onclick = () => { currentPage = 1; renderPage(1); window.scrollTo({top:0, behavior:'smooth'}); };
-
-      const prevBtn = document.createElement('button');
-      prevBtn.innerHTML = '&#x25C0;';
-      prevBtn.title = '上一页';
-      prevBtn.disabled = currentPage === 1;
-      prevBtn.onclick = () => { currentPage--; renderPage(currentPage); window.scrollTo({top:0, behavior:'smooth'}); };
-
-      const info = document.createElement('span');
-      info.className = 'page-info';
-      info.textContent = currentPage + ' / ' + totalPages;
-
-      const nextBtn = document.createElement('button');
-      nextBtn.innerHTML = '&#x25B6;';
-      nextBtn.title = '下一页';
-      nextBtn.disabled = currentPage === totalPages;
-      nextBtn.onclick = () => { currentPage++; renderPage(currentPage); window.scrollTo({top:0, behavior:'smooth'}); };
-
-      const lastBtn = document.createElement('button');
-      lastBtn.innerHTML = '&#x23ED;';
-      lastBtn.title = '末页';
-      lastBtn.disabled = currentPage === totalPages;
-      lastBtn.onclick = () => { currentPage = totalPages; renderPage(totalPages); window.scrollTo({top:0, behavior:'smooth'}); };
-
-      pagination.appendChild(firstBtn);
-      pagination.appendChild(prevBtn);
-      pagination.appendChild(info);
-      pagination.appendChild(nextBtn);
-      pagination.appendChild(lastBtn);
+      for (var p = 1; p <= totalPages; p++) {
+        var btn = document.createElement('button');
+        btn.textContent = p;
+        btn.className = p === currentPage ? 'active' : '';
+        btn.onclick = (function(page){ return function(){ currentPage = page; renderPage(page); window.scrollTo({top:0, behavior:'smooth'}); }; })(p);
+        pagination.appendChild(btn);
+      }
     }
+
+    // Back to top visibility
+    window.addEventListener('scroll', function(){
+      document.getElementById('backTop').classList.toggle('show', window.scrollY > 400);
+    });
 
     loadAlbums();
   </script>
