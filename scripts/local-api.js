@@ -22,6 +22,12 @@ const app = express();
 app.use(cors());
 app.use(express.static('_site'));
 
+// In-memory albums cache with TTL + request dedup
+let albumsCache = null;
+let albumsCacheTime = 0;
+let albumsPending = null;
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
 app.get('/album/*', (req, res) => {
   res.sendFile(path.join(__dirname, '..', '_site', 'album', 'index.html'));
 });
@@ -29,19 +35,18 @@ app.get('/album/*', (req, res) => {
 async function getAllResources() {
   let allResources = [];
   let cursor = null;
+  let page = 1;
 
   do {
-    let query = cloudinary.search
-      .expression('resource_type:image')
-      .sort_by('created_at', 'desc')
-      .max_results(500);
-
-    if (cursor) query = query.next_cursor(cursor);
-
-    const result = await query.execute();
+    const result = await cloudinary.api.resources({
+      type: 'upload',
+      max_results: 500,
+      next_cursor: cursor
+    });
     allResources = allResources.concat(result.resources || []);
     cursor = result.next_cursor;
-    console.log('Fetched:', allResources.length, 'resources');
+    console.log('  Page ' + page + ': ' + allResources.length + ' resources');
+    page++;
 
   } while (cursor);
 
@@ -49,65 +54,101 @@ async function getAllResources() {
 }
 
 async function getAlbums() {
-  console.log('Fetching all resources from Cloudinary...');
-  const resources = await getAllResources();
-  console.log('Total fetched:', resources.length);
+  // Return cached data if fresh
+  if (albumsCache && Date.now() - albumsCacheTime < CACHE_TTL) {
+    return albumsCache;
+  }
 
-  const folderMap = new Map();
+  // Dedup concurrent requests while first fetch is in progress
+  if (albumsPending) return albumsPending;
 
-  resources.forEach(resource => {
-    const folder = resource.asset_folder || resource.folder || '';
-    if (!folder) return;
+  try {
+    console.log('Fetching all resources from Cloudinary...');
+    albumsPending = getAllResources();
+    const resources = await albumsPending;
 
-    if (!folderMap.has(folder)) {
-      folderMap.set(folder, { folderName: folder, images: [] });
-    }
+    const folderMap = new Map();
 
-    folderMap.get(folder).images.push({
-      url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/v${resource.version}/${resource.public_id}.${resource.format}`,
-      filename: resource.display_name || resource.public_id.split('/').pop(),
-      width: resource.width,
-      height: resource.height
+    resources.forEach(resource => {
+      const folder = resource.asset_folder || resource.folder || '';
+      if (!folder) return;
+
+      if (!folderMap.has(folder)) {
+        folderMap.set(folder, { folderName: folder, images: [] });
+      }
+
+      folderMap.get(folder).images.push({
+        url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto${resource.version ? '/v' + resource.version : ''}/${resource.public_id}.${resource.format}`,
+        filename: resource.display_name || (resource.public_id || '').split('/').pop(),
+        width: resource.width,
+        height: resource.height
+      });
     });
-  });
 
-  return Array.from(folderMap.values())
-    .filter(a => a.folderName)
-    .sort((a, b) => b.folderName.localeCompare(a.folderName))
-    .map(a => ({
-      ...a,
-      date: a.folderName,
-      title: a.folderName,
-      coverImage: a.images[0]?.url || '',
-      url: a.folderName
-    }));
+    const result = Array.from(folderMap.values())
+      .filter(a => a.folderName)
+      .sort((a, b) => b.folderName.localeCompare(a.folderName))
+      .map(a => ({
+        ...a,
+        date: a.folderName,
+        title: a.folderName,
+        coverImage: a.images[0]?.url || '',
+        url: a.folderName
+      }));
+
+    albumsCache = result;
+    albumsCacheTime = Date.now();
+    return result;
+  } finally {
+    albumsPending = null;
+  }
+}
+
+function parseExif(meta) {
+  if (!meta) return null;
+  const m = {};
+  if (meta['exif:Make'] || meta['exif:Model']) m.camera = [meta['exif:Make'], meta['exif:Model']].filter(Boolean).join(' ');
+  if (meta['exif:FNumber']) m.aperture = 'f/' + parseFloat(meta['exif:FNumber']).toFixed(1);
+  if (meta['exif:FocalLength']) m.focalLength = meta['exif:FocalLength'].replace('.0', '');
+  if (meta['exif:ISOSpeedRatings']) m.iso = 'ISO ' + meta['exif:ISOSpeedRatings'];
+  if (meta['exif:ExposureTime']) m.shutter = meta['exif:ExposureTime'];
+  return Object.keys(m).length ? m : null;
 }
 
 async function getAlbum(folder) {
-  const result = await cloudinary.search
-    .expression(`resource_type:image AND folder:"${folder}"`)
-    .sort_by('created_at', 'asc')
-    .max_results(2500)
-    .with_field('image_metadata')
-    .execute();
-
-  function parseExif(meta) {
-    if (!meta) return null;
-    const m = {};
-    if (meta['exif:Make'] || meta['exif:Model']) m.camera = [meta['exif:Make'], meta['exif:Model']].filter(Boolean).join(' ');
-    if (meta['exif:FNumber']) m.aperture = 'f/' + parseFloat(meta['exif:FNumber']).toFixed(1);
-    if (meta['exif:FocalLength']) m.focalLength = meta['exif:FocalLength'].replace('.0', '');
-    if (meta['exif:ISOSpeedRatings']) m.iso = 'ISO ' + meta['exif:ISOSpeedRatings'];
-    if (meta['exif:ExposureTime']) m.shutter = meta['exif:ExposureTime'];
-    return Object.keys(m).length ? m : null;
+  // Try Search API for metadata (5s timeout), fall back to Admin API if unavailable
+  let metadataMap = new Map();
+  try {
+    const searchPromise = cloudinary.search
+      .expression(`resource_type:image AND folder:"${folder}"`)
+      .sort_by('created_at', 'asc')
+      .max_results(500)
+      .with_field('image_metadata')
+      .execute();
+    const searchResult = await Promise.race([
+      searchPromise,
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 5000))
+    ]);
+    (searchResult.resources || []).forEach(r => {
+      metadataMap.set(r.public_id, parseExif(r.image_metadata));
+    });
+  } catch (e) {
+    // Search API unavailable, metadata skipped
   }
 
-  return result.resources.map(r => ({
-    url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/v${r.version}/${r.public_id}.${r.format}`,
-    filename: r.display_name || r.public_id.split('/').pop(),
+  // Use Admin API for fast resource listing
+  const result = await cloudinary.api.resources_by_asset_folder(folder, { max_results: 500 });
+  const resources = result.resources || [];
+
+  // Sort by created_at ascending (Admin API doesn't support custom sort)
+  resources.sort((a, b) => (new Date(a.created_at || 0)) - (new Date(b.created_at || 0)));
+
+  return resources.map(r => ({
+    url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto${r.version ? '/v' + r.version : ''}/${r.public_id}.${r.format}`,
+    filename: r.display_name || (r.public_id || '').split('/').pop(),
     width: r.width,
     height: r.height,
-    metadata: parseExif(r.image_metadata)
+    metadata: metadataMap.get(r.public_id) || null
   }));
 }
 
@@ -117,7 +158,7 @@ app.get('/.netlify/functions/albums', async (req, res) => {
     res.json({ albums, total: albums.length });
   } catch (e) {
     console.error('Error:', e.message);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: '获取相册列表失败' });
   }
 });
 
@@ -129,11 +170,24 @@ app.get('/.netlify/functions/album', async (req, res) => {
     res.json({ folder, images, total: images.length });
   } catch (e) {
     console.error('Error:', e.message);
-    res.status(500).json({ error: e.message });
+    res.status(500).json({ error: '获取相册详情失败' });
   }
 });
 
 const PORT = 1023;
+
+// Test Cloudinary connectivity at startup
+async function testConnection() {
+  try {
+    await cloudinary.api.ping();
+    console.log('Cloudinary API connection OK');
+  } catch (e) {
+    console.error('\n⚠️  无法连接 Cloudinary API:', e.message);
+    console.error('   请检查网络连接或 .env 配置\n');
+  }
+}
+
+testConnection();
 app.listen(PORT, () => {
   console.log(`\n🚀 Server running at http://localhost:${PORT}`);
   console.log(`📡 Albums: http://localhost:${PORT}/.netlify/functions/albums`);

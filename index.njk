@@ -14,9 +14,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="{{ site.siteName }}">
+  <script>(function(){var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.removeAttribute('data-theme')}else{document.documentElement.setAttribute('data-theme','dark')}})();</script>
   <style>
-    :root{--bg:#ffffff;--card:#f5f5f7;--card-hover:#eeeef0;--text:#1d1d1f;--muted:#86868b;--accent:#d45a3a;--accent-glow:rgba(212,90,58,0.12);--border:rgba(0,0,0,0.08);--blur-bg:rgba(255,255,255,0.8)}
-    [data-theme="dark"]{--bg:#08080c;--card:#111116;--card-hover:#1a1a20;--text:#f5f5f7;--muted:#6b6b7a;--accent:#e07a5f;--accent-glow:rgba(224,122,95,0.15);--border:#1e1e26;--blur-bg:rgba(8,8,12,0.8)}
+    :root{--bg:#ffffff;--card:#f5f5f7;--card-hover:#eeeef0;--text:#1d1d1f;--muted:#86868b;--accent:#d45a3a;--accent-glow:rgba(212,90,58,0.12);--border:rgba(0,0,0,0.08);--blur-bg:rgba(255,255,255,0.8);--shimmer:rgba(0,0,0,.06)}
+    [data-theme="dark"]{--bg:#08080c;--card:#111116;--card-hover:#1a1a20;--text:#f5f5f7;--muted:#6b6b7a;--accent:#e07a5f;--accent-glow:rgba(224,122,95,0.15);--border:#1e1e26;--blur-bg:rgba(8,8,12,0.8);--shimmer:rgba(255,255,255,.1)}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth}
     body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','SF Pro Text','PingFang SC','Helvetica Neue',sans-serif;line-height:1.6;min-height:100vh;display:flex;flex-direction:column;-webkit-font-smoothing:antialiased;letter-spacing:0.01em}
@@ -27,11 +28,15 @@
     ::-webkit-scrollbar-track{background:transparent}
     ::-webkit-scrollbar-thumb{background:rgba(14,165,233,.12);border-radius:3px}
     ::-webkit-scrollbar-thumb:hover{background:rgba(14,165,233,.2)}
-    .site-header{padding:16px 48px;display:flex;justify-content:space-between;align-items:center;position:fixed;top:0;left:0;right:0;z-index:100;background:var(--blur-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    .site-header{padding:16px 48px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;left:0;right:0;z-index:100;background:var(--blur-bg);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border)}
+    main{animation:pageIn .4s ease}
     .site-header h1{font-size:1rem;font-weight:600;letter-spacing:-0.01em;display:flex;align-items:center;gap:10px}
     .site-header h1 a{transition:opacity .2s}
     .site-header h1 a:hover{opacity:.7}
+    .site-header h1 a:active{animation:logoPop .35s cubic-bezier(.34,1.56,.64,1)}
+    @keyframes logoPop{0%{transform:scale(1)}50%{transform:scale(.92)}65%{transform:scale(1.06)}100%{transform:scale(1)}}
     .logo-icon{width:24px;height:24px;background:linear-gradient(135deg,var(--accent) 0%,#f2a07b 100%);border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .logo-icon svg{transform:translateX(3px) translateY(1px)}
     .header-actions{display:flex;align-items:center;gap:10px}
     .theme-toggle{background:transparent;border:none;color:var(--muted);width:32px;height:32px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
     .theme-toggle:hover{color:var(--text);background:var(--card)}
@@ -41,13 +46,13 @@
     [data-theme="dark"] .sun-icon{display:block}
     [data-theme="dark"] .moon-icon{display:none}
     .container{max-width:1280px;margin:0 auto;padding:100px 40px 60px;flex:1}
-    .hero{text-align:center;padding:80px 20px 70px;position:relative}
+    .hero{text-align:center;padding:35px 20px 100px;position:relative}
     .hero::before{content:'';position:absolute;top:-40%;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(circle,var(--accent-glow) 0%,transparent 70%);pointer-events:none;z-index:0}
     .hero h1{font-size:4rem;font-weight:700;letter-spacing:-0.03em;margin-bottom:16px;color:var(--text);position:relative;z-index:1}
     .hero p{color:var(--muted);font-size:1.2rem;max-width:480px;margin:0 auto;letter-spacing:0.02em;line-height:1.5;position:relative;z-index:1}
     .albums{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
-    .album{border-radius:16px;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(24px);animation:fadeInUp .6s cubic-bezier(.16,1,.3,1) forwards;transition:transform .35s ease,box-shadow .35s ease;box-shadow:0 2px 8px rgba(0,0,0,.03)}
-    .album:hover{transform:translateY(-5px);box-shadow:0 16px 48px rgba(0,0,0,.07)}
+    .album{border-radius:16px;overflow:hidden;cursor:pointer;opacity:0;transform:translateY(24px);animation:fadeInUp .6s cubic-bezier(.16,1,.3,1) forwards;transition:transform .45s cubic-bezier(.34,1.56,.64,1),box-shadow .45s ease;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+    .album:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 24px 56px rgba(0,0,0,.08)}
     @keyframes fadeInUp{to{opacity:1;transform:translateY(0)}}
     .album:nth-child(1){animation-delay:.05s}
     .album:nth-child(2){animation-delay:.1s}
@@ -62,11 +67,11 @@
     .album:nth-child(11){animation-delay:.55s}
     .album:nth-child(12){animation-delay:.6s}
     .album-cover{aspect-ratio:16/11;overflow:hidden;position:relative;background:var(--card);border-radius:16px}
-    .album-cover img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.16,1,.3,1)}
+    .album-cover img{width:100%;height:100%;object-fit:cover;transition:transform .6s cubic-bezier(.16,1,.3,1)}
     .album:hover .album-cover img{transform:scale(1.04)}
-    .album-cover .placeholder{position:absolute;inset:0;background:var(--card);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:3rem;opacity:.4}
-    .album-info{padding:18px 4px 4px;display:flex;justify-content:space-between;align-items:center}
-    .album-date{font-size:1.05rem;font-weight:600;letter-spacing:-0.01em;color:var(--text)}
+    .album-info{padding:18px 4px 4px;display:flex;align-items:center}
+    .album-date{flex:1;text-align:center;font-size:1.05rem;font-weight:600;letter-spacing:-0.01em;color:var(--text);transition:color .3s ease}
+    .album:hover .album-date{color:var(--accent)}
     .album-count{color:var(--muted);font-size:.85rem;display:flex;align-items:center;gap:4px;transition:color .2s}
     .album:hover .album-count{color:var(--accent)}
     .album-count svg{width:14px;height:14px}
@@ -97,18 +102,37 @@
     .back-top.show{opacity:1;pointer-events:auto}
     .back-top:hover{color:var(--accent);border-color:var(--accent)}
     .back-top svg{width:18px;height:18px}
+    @keyframes pageIn{0%{opacity:0}100%{opacity:1}}
     .loading{text-align:center;padding:120px 20px;color:var(--muted)}
-    .loading-spinner{width:36px;height:36px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 20px}
+    .loading-spinner{width:48px;height:48px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .9s cubic-bezier(.6,0,.4,1) infinite;margin:0 auto 24px;position:relative}
+    .loading-spinner::after{content:'';position:absolute;inset:-4px;border:2px solid transparent;border-bottom-color:var(--accent);border-radius:50%;animation:spin 1.4s cubic-bezier(.6,0,.4,1) infinite reverse}
     @keyframes spin{to{transform:rotate(360deg)}}
+    .loading-tagline{color:var(--muted);font-size:1.1rem;letter-spacing:.04em;animation:pulse 2s ease-in-out infinite}
+    @keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
     .empty{text-align:center;padding:100px 20px;color:var(--muted)}
     .empty-icon{font-size:3rem;margin-bottom:12px;opacity:.4}
+    .error-state{text-align:center;padding:100px 20px;color:var(--muted)}
+    .error-state p{margin-bottom:20px}
+    .retry-btn{background:var(--card);border:1px solid var(--border);color:var(--text);padding:10px 24px;border-radius:10px;cursor:pointer;font-size:.9rem;font-weight:500;transition:all .2s}
+    .retry-btn:hover{background:var(--card-hover);border-color:var(--accent);color:var(--accent)}
+    .egg{cursor:pointer;display:inline-block;transition:color .2s}
+    @keyframes fadeInOverlay{to{opacity:1}}
+    .egg:hover{color:var(--accent)}
+    .egg-pop{animation:eggPop .45s cubic-bezier(.34,1.56,.64,1)}
+    @keyframes eggPop{0%{transform:scale(1)}40%{transform:scale(1.2)}70%{transform:scale(.95)}100%{transform:scale(1)}}
+    .egg-spin{animation:eggSpin .6s cubic-bezier(.34,1.56,.64,1)}
+    @keyframes eggSpin{0%{transform:rotate(0deg) scale(1)}50%{transform:rotate(180deg) scale(1.2)}100%{transform:rotate(360deg) scale(1)}}
+    .egg-shake{animation:eggShake .5s ease}
+    @keyframes eggShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-3px)}80%{transform:translateX(3px)}}
+    .egg-flash{animation:eggFlash .6s ease}
+    @keyframes eggFlash{0%{filter:brightness(1)}30%{filter:brightness(2)}100%{filter:brightness(1)}}
     @media(max-width:1024px){
       .albums{grid-template-columns:repeat(2,1fr);gap:20px}
     }
     @media(max-width:768px){
       .site-header{padding:14px 20px}
       .container{padding:80px 16px 40px}
-      .hero{padding:50px 10px 50px}
+      .hero{padding:40px 10px 60px}
       .hero h1{font-size:2.4rem}
       .hero p{font-size:1.05rem}
       .albums{grid-template-columns:repeat(2,1fr);gap:16px}
@@ -122,20 +146,18 @@
       .container{padding:70px 14px 30px}
       .back-top{bottom:60px;right:14px;width:34px;height:34px}
     }
-    }
   </style>
 </head>
 <body>
   <header class="site-header">
     <h1>
-      <span class="logo-icon">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5">
-          <circle cx="12" cy="12" r="10"/>
-          <circle cx="12" cy="12" r="4"/>
-          <circle cx="19" cy="8" r="2" fill="#fff" stroke="none"/>
+      <span class="logo-icon egg" id="egg-logo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8">
+          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+          <circle cx="12" cy="13" r="4"/>
         </svg>
       </span>
-      <a href="/">{{ site.siteName }}</a>
+      <a href="/" class="egg" id="egg-sitename">{{ site.siteName }}</a>
     </h1>
     <div class="header-actions">
       <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">
@@ -146,12 +168,16 @@
   </header>
   <main class="container">
     <section class="hero">
-      <h1>{{ site.siteTitle }}</h1>
-      <p>{{ site.siteDescription }}</p>
+      <h1><span class="egg" id="egg-record">记录生活</span><span>，</span><span class="egg" id="egg-freeze">定格美好</span></h1>
+      <p><span class="egg" id="egg-capture">用镜头捕捉每一个值得珍藏的瞬间</span></p>
     </section>
     <div id="loadingState" class="loading">
       <div class="loading-spinner"></div>
-      <p>正在加载相册...</p>
+      <p class="loading-tagline">进入美妙时刻~</p>
+    </div>
+    <div id="errorState" class="error-state" style="display:none">
+      <p>加载失败</p>
+      <button class="retry-btn" onclick="loadAlbums()">重试</button>
     </div>
     <div id="emptyState" class="empty" style="display:none">
       <div class="empty-icon">📷</div>
@@ -165,42 +191,81 @@
   </button>
   <footer class="footer">
     <div class="footer-inner">
-      <div class="footer-copy">© 2026 龚仔的摄影日记 <span class="contact-sep">|</span> 定格美妙瞬间</div>
+      <div class="footer-copy"><span class="egg" id="egg-year">© 2026</span> <span class="egg" id="egg-name">龚仔的摄影日记</span> <span class="contact-sep">|</span> <span class="egg" id="egg-moment">定格美妙瞬间</span></div>
       <div class="footer-contact">
         <a class="footer-link footer-link--red" href="https://xhslink.com/m/8MA6NoHQesz" target="_blank" rel="noopener">小红书</a>
         <span class="contact-sep">·</span>
         <a class="footer-link--douyin" href="https://v.douyin.com/owyNGXrRXrA/" target="_blank" rel="noopener">抖音</a>
         <span class="contact-sep">·</span>
-        <span>微信：GongzVirAug</span>
+        <span class="egg" id="egg-wechat">微信：GongzVirAug</span>
         <span class="contact-sep">·</span>
-        <span>邮箱：jogt@foxmail.com</span>
+        <span class="egg" id="egg-email">邮箱：jogt@foxmail.com</span>
       </div>
     </div>
   </footer>
-  <script>
-    (function(){var t=localStorage.getItem('theme');if(t==='light'){document.documentElement.removeAttribute('data-theme')}else{document.documentElement.setAttribute('data-theme','dark')}})();
+    <script>
     function toggleTheme(){var l=document.documentElement.getAttribute('data-theme')==='dark';if(l){document.documentElement.removeAttribute('data-theme');localStorage.setItem('theme','light')}else{document.documentElement.setAttribute('data-theme','dark');localStorage.setItem('theme','dark')}}
-    function srcset(url,w){return url.replace('f_auto,q_auto','w_'+w+',f_auto,q_auto')+' '+w+'w'}
-    function blurUrl(url){return url.replace('/upload/','/upload/w_30,e_blur:200,f_auto,q_auto/')}
-    const grid = document.getElementById('albumGrid');
-    const pagination = document.getElementById('pagination');
-    const loading = document.getElementById('loadingState');
-    const emptyState = document.getElementById('emptyState');
-    const PER_PAGE = 12;
-    let currentPage = 1;
-    let albums = [];
-    let totalPages = 1;
-
+    function srcset(url,w){return url.replace('f_auto,q_auto','w_'+w+',f_auto,q_auto:eco')+' '+w+'w'}
+    function blurUrl(url){return url.replace('/upload/','/upload/w_30,e_blur:200,f_auto,q_auto:eco/')}
+    var loadingState = document.getElementById('loadingState');
+    var errorState = document.getElementById('errorState');
+    var emptyState = document.getElementById('emptyState');
+    var grid = document.getElementById('albumGrid');
+    var pagination = document.getElementById('pagination');
+    var albums = [];
+    var currentPage = 1;
+    var totalPages = 1;
+    var PER_PAGE = 9;
+    
     async function loadAlbums() {
+      loadingState.style.display = 'block';
+      errorState.style.display = 'none';
+      emptyState.style.display = 'none';
+      grid.style.display = 'none';
+      pagination.style.display = 'none';
+
+      try {
+        const nav = performance.getEntriesByType('navigation')[0];
+        if (nav && nav.type === 'reload') sessionStorage.removeItem('albums_data');
+      } catch(e) {}
+
+      const cached = sessionStorage.getItem('albums_data');
+      if (cached) {
+        try {
+          const data = JSON.parse(cached);
+          var _valid = data.albums && Array.isArray(data.albums) && data.albums.length > 0 && data.albums[0].date;
+          if (!_valid) { sessionStorage.removeItem('albums_data'); throw new Error('bad cache'); }
+          albums = data.albums || [];
+          totalPages = Math.max(1, Math.ceil(albums.length / PER_PAGE));
+          loadingState.style.display = 'none';
+          if (albums.length === 0) {
+            emptyState.style.display = 'block';
+          } else {
+            grid.style.display = 'grid';
+            pagination.style.display = 'flex';
+            renderPage(1);
+          }
+          fetchAlbumsFresh();
+          return;
+        } catch(e) { sessionStorage.removeItem('albums_data'); }
+      }
+
+      fetchAlbumsFresh();
+    }
+
+    async function fetchAlbumsFresh() {
       try {
         const apiBase = window.location.hostname === 'localhost' ? 'http://localhost:1023' : '';
         const response = await fetch(apiBase + '/.netlify/functions/albums');
         if (!response.ok) throw new Error('Failed to load');
         const data = await response.json();
+        var _v = data.albums && Array.isArray(data.albums) && data.albums.length > 0 && data.albums[0].date;
+        if (!_v) throw new Error('invalid data');
+        sessionStorage.setItem('albums_data', JSON.stringify(data));
         albums = data.albums || [];
         totalPages = Math.max(1, Math.ceil(albums.length / PER_PAGE));
         
-        loading.style.display = 'none';
+        loadingState.style.display = 'none';
         if (albums.length === 0) {
           emptyState.style.display = 'block';
         } else {
@@ -210,7 +275,8 @@
         }
       } catch (error) {
         console.error('Load error:', error);
-        loading.innerHTML = '<p>加载失败，请确保本地API服务器已启动<br><br>运行: <strong>npm run dev</strong></p>';
+        loadingState.style.display = 'none';
+        errorState.style.display = 'block';
       }
     }
 
@@ -220,37 +286,53 @@
       var start = (page - 1) * PER_PAGE;
       var end = Math.min(start + PER_PAGE, albums.length);
 
-      for (var i = start; i < end; i++) {
-        var album = albums[i];
-        var coverUrl = album.coverImage || (album.images && album.images[0] && album.images[0].url) || '';
-        var photoCount = album.images ? album.images.length : 0;
-        var isFirst = i === start;
-        var previewUrls = album.images ? album.images.slice(0, 4).map(function(x){ return x.url; }).filter(Boolean) : [];
+      for (let i = start; i < end; i++) {
+        let album = albums[i];
+        if (!album || typeof album !== 'object') continue;
+        let coverUrl = '';
+        var _cv = album.coverImage;
+        if (_cv && _cv !== 'undefined' && _cv !== 'null' && typeof _cv === 'string' && _cv.startsWith('http')) {
+          coverUrl = _cv;
+        } else if (album.images && album.images[0] && album.images[0].url) {
+          var _u = album.images[0].url;
+          if (_u !== 'undefined' && _u !== 'null' && typeof _u === 'string' && _u.startsWith('http')) {
+            coverUrl = _u;
+          }
+        }
+        let photoCount = album.images ? album.images.length : 0;
+        var albumDate = album.date || '';
+        var albumUrl = album.url || '';
+        let isFirst = i === start;
+        let previewUrls = album.images ? album.images.slice(0, 4).map(function(x){ return x.url; }).filter(Boolean) : [];
 
-        var article = document.createElement('article');
+        let article = document.createElement('article');
         article.className = 'album';
 
-        var cover = document.createElement('div');
+        let cover = document.createElement('div');
         cover.className = 'album-cover';
         if (coverUrl) cover.style.background = 'url(' + blurUrl(coverUrl) + ') center/cover no-repeat';
 
-        var img = document.createElement('img');
-        img.src = coverUrl;
-        img.alt = album.date;
-        img.loading = isFirst ? 'eager' : 'lazy';
-        if (isFirst) img.fetchPriority = 'high';
-        img.sizes = '(max-width:768px) 50vw, (max-width:1024px) 33vw, 25vw';
-        img.srcset = [400, 800, 1200].map(function(w){ return srcset(coverUrl, w); }).join(', ');
-        img.onload = function(){ this.style.opacity = '1'; };
-        if (coverUrl) img.style.opacity = '0';
-
+        let img = document.createElement('img');
+        if (coverUrl) {
+          img.src = coverUrl;
+          img.alt = albumDate;
+          img.loading = isFirst ? 'eager' : 'lazy';
+          if (isFirst) img.fetchPriority = 'high';
+          img.sizes = '(max-width:520px) 90vw, (max-width:768px) 45vw, (max-width:1024px) 30vw, 25vw';
+          img.srcset = [200, 400, 800].map(function(w){ return srcset(coverUrl, w); }).join(', ');
+          img.onload = function(){ this.style.opacity = '1'; };
+          img.onerror = function(){ this.style.display = 'none'; };
+          img.style.opacity = '0';
+        } else {
+          img.style.display = 'none';
+        }
         cover.appendChild(img);
 
         // Hover preview
         if (previewUrls.length > 1) {
-          var hoverTimer;
+          let hoverTimer;
           article.addEventListener('mouseenter', function(){
-            var idx = 0;
+            let idx = 0;
             hoverTimer = setInterval(function(){
               idx = (idx + 1) % previewUrls.length;
               img.src = previewUrls[idx];
@@ -259,18 +341,20 @@
           });
           article.addEventListener('mouseleave', function(){
             clearInterval(hoverTimer);
-            img.src = coverUrl;
-            img.srcset = [400,800,1200].map(function(w){ return srcset(coverUrl, w); }).join(', ');
+            if (coverUrl) {
+              img.src = coverUrl;
+              img.srcset = [400,800,1200].map(function(w){ return srcset(coverUrl, w); }).join(', ');
+            }
           });
         }
 
-        var info = document.createElement('div');
+        let info = document.createElement('div');
         info.className = 'album-info';
-        info.innerHTML = '<span class="album-date">' + album.date + '</span><span class="album-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>' + photoCount + '</span>';
+        info.innerHTML = '<span class="album-date">' + albumDate + '</span><span class="album-count"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>' + photoCount + '</span>';
 
         article.appendChild(cover);
         article.appendChild(info);
-        article.onclick = function(){ window.location.href = '/album/' + album.url; };
+        article.onclick = function(){ if (albumUrl) window.location.href = '/album/' + albumUrl; };
         grid.appendChild(article);
       }
 
@@ -283,8 +367,9 @@
       var start = page * PER_PAGE;
       var end = Math.min(start + PER_PAGE, albums.length);
       for (var i = start; i < end; i++) {
-        var u = albums[i].coverImage || (albums[i].images && albums[i].images[0] && albums[i].images[0].url);
-        if (u) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = u; document.head.appendChild(l); }
+        var u = albums[i].coverImage;
+        if (!u || u === 'undefined' || u === 'null') u = albums[i].images && albums[i].images[0] && albums[i].images[0].url;
+        if (u && u !== 'undefined' && u !== 'null' && u.startsWith && u.startsWith('http')) { var l = document.createElement('link'); l.rel = 'preload'; l.as = 'image'; l.href = u; document.head.appendChild(l); }
       }
     }
 
@@ -307,6 +392,63 @@
     });
 
     loadAlbums();
+
+    // ─── 小彩蛋 ───
+    function egg(el, anim) {
+      el.classList.remove(anim);
+      void el.offsetWidth;
+      el.classList.add(anim);
+    }
+    function overlay(msg, duration) {
+      duration = duration || 1800;
+      var o = document.createElement('div');
+      o.style.cssText = 'position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:80px;z-index:9999;pointer-events:none';
+      var t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'background:rgba(0,0,0,.06);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);padding:20px 40px;border-radius:14px;color:var(--text);font-size:1.4rem;font-weight:600;letter-spacing:.06em;opacity:0;animation:fadeInOverlay .35s ease forwards;box-shadow:0 8px 40px rgba(0,0,0,.04)';
+      o.appendChild(t);
+      document.body.appendChild(o);
+      setTimeout(function(){ o.style.transition = 'opacity .5s'; o.style.opacity = '0'; setTimeout(function(){ o.remove(); }, 500); }, duration);
+    }
+    function hearts(el) {
+      var rect = el.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      for (var i = 0; i < 10; i++) {
+        (function(){
+          var h = document.createElement('span');
+          h.textContent = '♥';
+          h.style.cssText = 'position:fixed;left:'+cx+'px;top:'+cy+'px;pointer-events:none;z-index:9998;font-size:'+(14+Math.random()*14)+'px;color:var(--accent);opacity:1;transform:translateY(0) scale(1);transition:all 1.2s cubic-bezier(.25,.46,.45,.94)';
+          document.body.appendChild(h);
+          var angle = Math.random() * Math.PI * 2;
+          var dist = 40 + Math.random() * 100;
+          requestAnimationFrame(function(){
+            h.style.transform = 'translate('+Math.cos(angle)*dist+'px,'+(Math.sin(angle)*dist-80)+'px) scale(0)';
+            h.style.opacity = '0';
+          });
+          setTimeout(function(){ h.remove(); }, 1200);
+        })();
+      }
+    }
+
+    document.getElementById('egg-logo').addEventListener('click', function(e){ e.stopPropagation(); egg(this, 'egg-spin'); });
+    document.getElementById('egg-sitename').addEventListener('click', function(e){ e.preventDefault(); hearts(this); egg(this, 'egg-pop'); });
+    document.getElementById('egg-record').addEventListener('click', function(){ egg(this, 'egg-pop'); });
+    document.getElementById('egg-freeze').addEventListener('click', function(){ egg(this, 'egg-flash'); });
+    document.getElementById('egg-capture').addEventListener('click', function(){ egg(this, 'egg-shake'); });
+    document.getElementById('egg-name').addEventListener('click', function(){ egg(this, 'egg-pop'); });
+    document.getElementById('egg-year').addEventListener('click', function(){ overlay('Fight!'); });
+    document.getElementById('egg-moment').addEventListener('click', function(){ hearts(this); egg(this, 'egg-pop'); });
+    document.getElementById('egg-wechat').addEventListener('click', function(){
+      navigator.clipboard.writeText('GongzVirAug');
+      overlay('微信已复制 ✓');
+      egg(this, 'egg-pop');
+    });
+    document.getElementById('egg-email').addEventListener('click', function(){
+      navigator.clipboard.writeText('jogt@foxmail.com');
+      overlay('邮箱已复制 ✓');
+      egg(this, 'egg-pop');
+    });
   </script>
 </body>
 </html>

@@ -1,10 +1,3 @@
-/**
- * Cloudinary Albums API
- * 
- * 用于从Cloudinary获取所有相册数据，保护API密钥
- * 使用分页获取所有资源
- */
-
 require('dotenv').config();
 const cloudinary = require('cloudinary').v2;
 
@@ -49,9 +42,9 @@ async function getAlbums() {
       folderMap.set(folder, { folderName: folder, images: [] });
     }
 
-    folderMap.get(folder).images.push({
-      url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto/v${resource.version}/${resource.public_id}.${resource.format}`,
-      filename: resource.display_name || resource.public_id.split('/').pop(),
+      folderMap.get(folder).images.push({
+        url: `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/f_auto,q_auto${resource.version ? '/v' + resource.version : ''}/${resource.public_id}.${resource.format}`,
+        filename: resource.display_name || (resource.public_id || '').split('/').pop(),
       width: resource.width,
       height: resource.height
     });
@@ -80,11 +73,13 @@ exports.handler = async function(event, context) {
       statusCode: 200,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'public, max-age=300, s-maxage=300'
       },
       body: JSON.stringify({ albums, total: albums.length })
     };
   } catch (e) {
-    return { statusCode: 500, body: JSON.stringify({ error: e.message }) };
+    console.error('Album list error:', e);
+    return { statusCode: 500, body: JSON.stringify({ error: '获取相册列表失败' }) };
   }
 };
