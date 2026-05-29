@@ -290,18 +290,18 @@
         let album = albums[i];
         if (!album || typeof album !== 'object') continue;
         let coverUrl = '';
-        var _cv = album.coverImage;
+        let _cv = album.coverImage;
         if (_cv && _cv !== 'undefined' && _cv !== 'null' && typeof _cv === 'string' && _cv.startsWith('http')) {
           coverUrl = _cv;
         } else if (album.images && album.images[0] && album.images[0].url) {
-          var _u = album.images[0].url;
+          let _u = album.images[0].url;
           if (_u !== 'undefined' && _u !== 'null' && typeof _u === 'string' && _u.startsWith('http')) {
             coverUrl = _u;
           }
         }
         let photoCount = album.images ? album.images.length : 0;
-        var albumDate = album.date || '';
-        var albumUrl = album.url || '';
+        let albumDate = album.date || '';
+        let albumUrl = album.url || '';
         let isFirst = i === start;
         let previewUrls = album.images ? album.images.slice(0, 4).map(function(x){ return x.url; }).filter(Boolean) : [];
 
