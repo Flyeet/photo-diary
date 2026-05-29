@@ -249,7 +249,7 @@
     function blurUrl(url){return url.replace('/upload/','/upload/w_30,e_blur:200,f_auto,q_auto:eco/')}
     var SITE_NAME = '{{ site.siteName }}';
     const pathParts = window.location.pathname.split('/').filter(Boolean);
-    const folder = decodeURIComponent(pathParts[1] || pathParts[0] || '');
+    const folder = decodeURIComponent(pathParts.slice(1).join('/') || pathParts[0] || '');
     let images = [];
     let currentIndex = 0;
     const grid = document.getElementById('photoGrid');

@@ -28,15 +28,6 @@ exports.handler = async function(event, context) {
   try {
     const CLOUD_NAME = process.env.CLOUDINARY_CLOUD_NAME;
 
-    const result = await cloudinary.search
-      .expression(`resource_type:image AND asset_folder:"${folder}"`)
-      .sort_by('created_at', 'asc')
-      .max_results(500)
-      .with_field('image_metadata')
-      .execute();
-
-    const resources = result.resources || [];
-
     function parseExif(meta) {
       if (!meta) return null;
       const m = {};
@@ -47,6 +38,26 @@ exports.handler = async function(event, context) {
       if (meta['exif:ExposureTime']) m.shutter = meta['exif:ExposureTime'];
       return Object.keys(m).length ? m : null;
     }
+
+    // Try Search API for metadata (optional), then always use Admin API for reliable resource listing
+    let metadataMap = new Map();
+    try {
+      const metaResult = await cloudinary.search
+        .expression(`resource_type:image AND asset_folder:"${folder}"`)
+        .max_results(500)
+        .with_field('image_metadata')
+        .execute();
+      (metaResult.resources || []).forEach(r => {
+        metadataMap.set(r.public_id, parseExif(r.image_metadata));
+      });
+    } catch (e) {
+      // metadata optional
+    }
+
+    const result = await cloudinary.api.resources_by_asset_folder(folder, { max_results: 500 });
+    const resources = result.resources || [];
+
+    resources.sort((a, b) => (new Date(a.created_at || 0)) - (new Date(b.created_at || 0)));
 
     const images = resources.map(resource => {
       const originalFilename = resource.display_name || (resource.public_id || '').split('/').pop();
@@ -59,7 +70,7 @@ exports.handler = async function(event, context) {
         height: resource.height,
         createdAt: resource.created_at,
         bytes: resource.bytes,
-        metadata: parseExif(resource.image_metadata)
+        metadata: metadataMap.get(resource.public_id) || null
       };
     });
 
