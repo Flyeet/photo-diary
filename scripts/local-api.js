@@ -120,7 +120,7 @@ async function getAlbum(folder) {
   let metadataMap = new Map();
   try {
     const searchPromise = cloudinary.search
-      .expression(`resource_type:image AND folder:"${folder}"`)
+      .expression(`resource_type:image AND asset_folder:"${folder}"`)
       .sort_by('created_at', 'asc')
       .max_results(500)
       .with_field('image_metadata')
