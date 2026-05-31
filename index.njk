@@ -357,7 +357,7 @@
 
         article.appendChild(cover);
         article.appendChild(info);
-        article.onclick = function(){ if (albumUrl) window.location.href = '/album/' + albumUrl; };
+        article.onclick = function(){ if (albumUrl) window.location.href = '/album/' + encodeURIComponent(albumUrl); };
         grid.appendChild(article);
       }
 
