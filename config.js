@@ -1,13 +1,11 @@
 module.exports = {
-  siteName: '龚仔的摄影日记',
-  siteTitle: '记录生活，定格美好',
-  siteDescription: '用镜头捕捉每一个值得珍藏的瞬间',
+  siteName: 'Tiffany的边边角角',
+  siteTitle: '用照片写日记',
+  siteDescription: '拍下幸福的瞬间，我也站在幸福里',
   footer: {
     social: [
-      { label: '小红书', url: 'https://xhslink.com/m/8MA6NoHQesz', brand: 'xiaohongshu' },
-      { label: '抖音', url: 'https://v.douyin.com/owyNGXrRXrA/', brand: 'douyin' },
-      { label: '微信：GongzVirAug' },
-      { label: '邮箱：jogt@foxmail.com', url: 'mailto:jogt@foxmail.com' }
+      { label: '微信：Flyee_t' },
+      { label: '邮箱：Flyee_t@163.com', url: 'mail.163.com/' }
     ]
   }
 };
