@@ -54,7 +54,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, '127.0.0.1', () => {
   console.log(`\n========================================`);
-  console.log(`  龚仔的摄影日记 已启动`);
+  console.log(`  Tiffany的边边角角 已启动`);
   console.log(`  请访问: http://localhost:${PORT}/`);
   console.log(`  按 Ctrl+C 停止服务器`);
   console.log(`========================================\n`);
