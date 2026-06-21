@@ -2,9 +2,9 @@ const path = require('path');
 const fs = require('fs');
 
 const defaults = {
-  siteName: '摄影日记',
-  siteTitle: '记录生活',
-  siteDescription: '用镜头捕捉每一个瞬间',
+  siteName: 'Tiffany的边边角角',
+  siteTitle: '用照片写日记',
+  siteDescription: '拍下幸福的瞬间，我也站在幸福里',
   footer: { html: '© 2026' },
   contacts: {}
 };
